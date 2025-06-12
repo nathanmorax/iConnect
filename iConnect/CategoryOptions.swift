@@ -7,11 +7,14 @@
 
 import SwiftUI
 
-enum Category: String, CaseIterable, Identifiable {
+enum CategoryOptions: String, CaseIterable, Identifiable, Hashable {
     case request
     case collections
     case favorites
     case history
+    
+    static let mainPages: [CategoryOptions] = [.request, .collections, .favorites, .history]
+
     
     var id: Self { self }
     
@@ -32,14 +35,33 @@ enum Category: String, CaseIterable, Identifiable {
         case .history: "clock.fill"
         }
     }
+    
+    @MainActor
+    @ViewBuilder
+    func viewForPage(selectedRequest: Request? = nil, storage: RequestStorage? = nil) -> some View {
+        switch self {
+        case .request:
+            RequestView()
+        case .collections:
+            if let request = selectedRequest {
+                RequestView(method: request.method, endpoint: request.endpoint)
+            } else {
+                Text("Selecciona una request")
+                    .foregroundColor(.secondary)
+            }
+        case .favorites:
+            Text("Favoritos")
+        case .history:
+            Text("Historial")
+        }
+    }
 }
-
 
 struct CategoryModel: Identifiable, Hashable {
     let id = UUID()
     let title: String
     let iconName: String
-    var category: Category? = nil
+    var category: CategoryOptions? = nil
     var children: [CategoryModel]? = nil
 }
 

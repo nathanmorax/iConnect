@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct SideBarView: View {
-    @Binding var selection: Category?
+    @Binding var selection: CategoryOptions?
     @Binding var selectedCollectionName: String?
     @EnvironmentObject var storage: RequestStorage
 

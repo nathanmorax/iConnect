@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selection: Category? = .collections
+    @State private var selection: CategoryOptions? = .collections
     @State private var selectedCollectionName: String? = nil
     @EnvironmentObject var storage: RequestStorage
     @State private var selectedRequest: Request?
