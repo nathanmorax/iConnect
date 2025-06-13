@@ -16,7 +16,7 @@ struct iConnectApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplitView()
                 .environment(modelData)
 
         }

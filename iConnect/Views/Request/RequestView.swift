@@ -9,9 +9,11 @@ import SwiftUI
 struct RequestView: View {
     
     @StateObject private var vm: RequestViewModel
-    //@EnvironmentObject var storage: RequestStorage
     @State var showSave = false
-    
+    @State var isShowingLandmarksSelection: Bool = false
+    @State private var selectedCollection: RequestCollection? = nil
+
+
     let method: String
     let endpoint: String
     
@@ -21,30 +23,12 @@ struct RequestView: View {
         _vm = StateObject(wrappedValue: RequestViewModel(method: method, endpoint: endpoint))
     }
     
-    // Agrupar requests por colección con conteo
-    /*var collectionsCount: [(collection: String, count: Int)] {
-        //let grouped = Dictionary(grouping: storage.savedRequests, by: { $0.collection })
-        //return grouped.map { ($0.key, $0.value.count) }.sorted(by: { $0.collection < $1.collection })
-    }*/
-    
     var body: some View {
         VStack {
-            // Lista de colecciones con cantidad de requests guardados
-            /*List(collectionsCount, id: \.collection) { item in
-                HStack {
-                    Text(item.collection)
-                        .fontWeight(.bold)
-                    Spacer()
-                    Text("\(item.count) request\(item.count == 1 ? "" : "s")")
-                        .foregroundColor(.secondary)
-                }
-            }
-            .frame(height: 150) // ajustar tamaño según convenga*/
             
             Divider()
             
             HStack {
-                Text(vm.endpoint)
                 
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
                 
@@ -70,10 +54,10 @@ struct RequestView: View {
                 toolBarSaveRequest
             }
         }
-        .sheet(isPresented: $showSave) {
-            SaveRequestSheetView(method: "", endpoint: "")
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+        .sheet(isPresented: $isShowingLandmarksSelection) {
+            
+            CollectionSelectionList(selectedCollection: $selectedCollection, method: vm.selectMethod.rawValue, endpoint: vm.endpoint, requestTitle: vm.responseText)
+                .frame(minWidth: 200.0, minHeight: 400.0)
         }
         .onChange(of: method) {
             vm.selectMethod = HTTPMethod(rawValue: method) ?? .get
@@ -87,7 +71,7 @@ struct RequestView: View {
     var toolBarSaveRequest: some View {
         VStack {
             Button {
-                showSave.toggle()
+                isShowingLandmarksSelection.toggle()
             } label: {
                 Label("Save Request", systemImage: "bookmark.fill")
             }
@@ -104,6 +88,7 @@ struct RequestView: View {
 struct SaveRequestSheetView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(ModelData.self) var modelData
+    
     
     var method: String
     var endpoint: String

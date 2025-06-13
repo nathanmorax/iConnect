@@ -30,6 +30,11 @@ class ModelData {
     // MARK: - Search
     var searchString: String = ""
     
+    var allCollections: [RequestCollection] {
+        userCollections.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+    }
+
+    
     // MARK: - Init
     init() {
         loadData()
@@ -134,6 +139,7 @@ class ModelData {
     func removeFavorite(_ request: Request) {
         favoritesCollection.request.removeAll { $0 == request }
     }
+    
 }
 
 

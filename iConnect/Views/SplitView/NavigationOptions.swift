@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-enum CategoryOptions: Equatable, Hashable, Identifiable {
+enum NavigationOptions: Equatable, Hashable, Identifiable {
     case request
     case collections
     case favorites
     case history
     
-    static let mainPages: [CategoryOptions] = [.request, .collections, .favorites, .history]
+    static let mainPages: [NavigationOptions] = [.request, .collections, .favorites, .history]
 
     
     
