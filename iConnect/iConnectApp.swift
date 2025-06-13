@@ -10,12 +10,14 @@ import SwiftUI
 @main
 struct iConnectApp: App {
 
-    @StateObject private var storage = RequestStorage()
+    //@StateObject private var storage = RequestStorage()
+    @State private var modelData = ModelData()
+
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(storage)
+                .environment(modelData)
 
         }
     }

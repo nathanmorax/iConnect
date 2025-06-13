@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct SideBarView: View {
+/*struct SideBarView: View {
     @Binding var selection: CategoryOptions?
     @Binding var selectedCollectionName: String?
     @EnvironmentObject var storage: RequestStorage
@@ -94,10 +94,6 @@ struct UserProfileView: View {
             // Navegar al perfil, mostrar opciones, etc.
         }
     }
-}
+}*/
 
 
-#Preview {
-    SideBarView(selection: .constant(.collections), selectedCollectionName: .constant(""))
-        .listStyle(.sidebar)
-}

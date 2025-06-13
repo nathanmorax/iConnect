@@ -9,7 +9,7 @@ import SwiftUI
 struct RequestView: View {
     
     @StateObject private var vm: RequestViewModel
-    @EnvironmentObject var storage: RequestStorage
+    //@EnvironmentObject var storage: RequestStorage
     @State var showSave = false
     
     let method: String
@@ -22,15 +22,15 @@ struct RequestView: View {
     }
     
     // Agrupar requests por colección con conteo
-    var collectionsCount: [(collection: String, count: Int)] {
-        let grouped = Dictionary(grouping: storage.savedRequests, by: { $0.collection })
-        return grouped.map { ($0.key, $0.value.count) }.sorted(by: { $0.collection < $1.collection })
-    }
+    /*var collectionsCount: [(collection: String, count: Int)] {
+        //let grouped = Dictionary(grouping: storage.savedRequests, by: { $0.collection })
+        //return grouped.map { ($0.key, $0.value.count) }.sorted(by: { $0.collection < $1.collection })
+    }*/
     
     var body: some View {
         VStack {
             // Lista de colecciones con cantidad de requests guardados
-            List(collectionsCount, id: \.collection) { item in
+            /*List(collectionsCount, id: \.collection) { item in
                 HStack {
                     Text(item.collection)
                         .fontWeight(.bold)
@@ -39,7 +39,7 @@ struct RequestView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .frame(height: 150) // ajustar tamaño según convenga
+            .frame(height: 150) // ajustar tamaño según convenga*/
             
             Divider()
             
@@ -71,7 +71,7 @@ struct RequestView: View {
             }
         }
         .sheet(isPresented: $showSave) {
-            SaveRequestSheetView(method: vm.selectMethod.rawValue, endpoint: vm.endpoint, storage: _storage)
+            SaveRequestSheetView(method: "", endpoint: "")
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
         }
@@ -103,56 +103,73 @@ struct RequestView: View {
 
 struct SaveRequestSheetView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(ModelData.self) var modelData
     
     var method: String
     var endpoint: String
-    @EnvironmentObject var storage: RequestStorage
 
-    @State private var requestName: String = ""
-    @State private var selectedCollection: String = ""
+    @State private var nameCollection: String = ""
+    @State private var selectedCollection: RequestCollection?
     @State private var showNewCollectionField = false
     @State private var newCollectionName: String = ""
     
     var body: some View {
+        @Bindable var modelData = modelData
+
         Form {
-            Section(header: Text("Nombre del Request")) {
-                TextField("Ej: Obtener usuario", text: $requestName)
+            Section(header: Text("Add Request in Collection")) {
+                TextField("Name Request", text: $nameCollection)
             }
-            
+
             Section(header: Text("Colección")) {
                 Picker("Colección", selection: $selectedCollection) {
-                    ForEach(storage.collections, id: \.self) { collection in
-                        Text(collection).tag(collection)
+                    ForEach(modelData.userCollections, id: \.self) { collection in
+                        Text(collection.name).tag(Optional(collection))
                     }
-                    Text("Nueva…").tag("__new")
+                    Text("Nueva…").tag(nil as RequestCollection?)
                 }
                 .pickerStyle(.menu)
                 .onChange(of: selectedCollection) { value in
-                    showNewCollectionField = value == "__new"
+                    showNewCollectionField = (value == nil)
                 }
-                
+
                 if showNewCollectionField {
                     TextField("Nombre de la nueva colección", text: $newCollectionName)
                 }
             }
-            
+
             Section {
                 Button("Guardar") {
-                    let collectionToUse = showNewCollectionField ? newCollectionName : selectedCollection
-                    storage.saveRequest(name: requestName, method: method, endpoint: endpoint, collection: collectionToUse)
+                    let targetCollection: RequestCollection
+
+                    if showNewCollectionField {
+                        targetCollection = modelData.addCollection(nameCollection: newCollectionName)
+                    } else if let existingCollection = selectedCollection {
+                        targetCollection = existingCollection
+                    } else {
+                        return
+                    }
+
+                    _ = modelData.createAndAddRequest(
+                        title: nameCollection,
+                        method: method,
+                        endpoint: endpoint,
+                        to: targetCollection
+                    )
+
                     dismiss()
                 }
-                .disabled(requestName.isEmpty || (showNewCollectionField && newCollectionName.isEmpty))
+                .disabled(nameCollection.isEmpty || (showNewCollectionField && newCollectionName.isEmpty))
             }
         }
         .onAppear {
-            if let first = storage.collections.first {
-                selectedCollection = first
-            } else {
-                selectedCollection = "__new"
+            if modelData.userCollections.isEmpty {
+                selectedCollection = nil
                 showNewCollectionField = true
+            } else {
+                selectedCollection = modelData.userCollections.first
+                showNewCollectionField = false
             }
         }
     }
 }
-

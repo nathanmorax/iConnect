@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CategoryOptions: String, CaseIterable, Identifiable, Hashable {
+enum CategoryOptions: Equatable, Hashable, Identifiable {
     case request
     case collections
     case favorites
@@ -16,9 +16,17 @@ enum CategoryOptions: String, CaseIterable, Identifiable, Hashable {
     static let mainPages: [CategoryOptions] = [.request, .collections, .favorites, .history]
 
     
-    var id: Self { self }
     
-    var title: String {
+    var id: String {
+        switch self {
+        case .request: "Requests"
+        case .collections: "Collections"
+        case .favorites: "Favorites"
+        case .history: "History"
+        }
+    }
+    
+    var name: String {
         switch self {
         case .request: "Requests"
         case .collections: "Collections"
@@ -38,43 +46,38 @@ enum CategoryOptions: String, CaseIterable, Identifiable, Hashable {
     
     @MainActor
     @ViewBuilder
-    func viewForPage(selectedRequest: Request? = nil, storage: RequestStorage? = nil) -> some View {
+    func viewForPage() -> some View {
         switch self {
         case .request:
             RequestView()
         case .collections:
-            if let request = selectedRequest {
-                RequestView(method: request.method, endpoint: request.endpoint)
-            } else {
-                Text("Selecciona una request")
-                    .foregroundColor(.secondary)
-            }
+            CollectionsView()
+
         case .favorites:
-            Text("Favoritos")
+            FavoritesView()
         case .history:
-            Text("Historial")
+            HistoryView()
         }
     }
 }
 
-struct CategoryModel: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let iconName: String
-    var category: CategoryOptions? = nil
-    var children: [CategoryModel]? = nil
+
+struct CollectionView: View {
+    var body: some View {
+        Text("CollectionView")
+    }
 }
 
-let sidebarCategories: [CategoryModel] = [
-    CategoryModel(title: "Requests", iconName: "paperplane.fill", category: .request),
-    CategoryModel(title: "Collections", iconName: "cube.fill", category: .collections, children: [
-        CategoryModel(title: "Work", iconName: "folder.fill"),
-        CategoryModel(title: "Personal", iconName: "folder.fill"),
-        CategoryModel(title: "Archived", iconName: "archivebox.fill")
-    ]),
-    CategoryModel(title: "Favorites", iconName: "heart.fill", category: .favorites),
-    CategoryModel(title: "History", iconName: "clock.fill", category: .history, children: [
-        CategoryModel(title: "Personal", iconName: "folder.fill"),
-        CategoryModel(title: "Archived", iconName: "archivebox.fill")
-    ])
-]
+struct FavoritesView: View {
+    var body: some View {
+        Text("FavoritesView")
+    }
+}
+
+struct HistoryView: View {
+    var body: some View {
+        Text("HistoryView")
+    }
+}
+
+

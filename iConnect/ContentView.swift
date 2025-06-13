@@ -8,117 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selection: CategoryOptions? = .collections
-    @State private var selectedCollectionName: String? = nil
-    @EnvironmentObject var storage: RequestStorage
-    @State private var selectedRequest: Request?
-    
-    var groupedRequests: [String: [Request]] {
-        Dictionary(grouping: storage.savedRequests, by: { $0.collection })
-    }
+    @Environment(ModelData.self) var modelData
+    @State private var preferredColumn: NavigationSplitViewColumn = .detail
     
     var body: some View {
-       /* NavigationSplitView {
-            SideBarView(selection: $selection, selectedCollectionName: $selectedCollectionName)
-                .environmentObject(storage)
-            
-        } /*content: {
-           switch selection {
-           case .collections:
-           List(selection: $selectedRequest) {
-           if let selected = selectedCollectionName {
-           Section(header: Text(selected).font(.headline)) {
-           ForEach(groupedRequests[selected] ?? []) { request in
-           VStack(alignment: .leading) {
-           Text(request.name)
-           .font(.headline)
-           .foregroundStyle(.blue)
-           Text("\(request.method) \(request.endpoint)")
-           .font(.caption)
-           .foregroundColor(.gray)
-           }
-           .tag(request)
-           }
-           }
-           } else {
-           ForEach(groupedRequests.keys.sorted(), id: \.self) { collection in
-           Section(header: Text(collection).font(.headline)) {
-           ForEach(groupedRequests[collection] ?? []) { request in
-           VStack(alignment: .leading) {
-           Text(request.name)
-           .font(.headline)
-           .foregroundStyle(.blue)
-           Text("\(request.method) \(request.endpoint)")
-           .font(.caption)
-           .foregroundColor(.gray)
-           }
-           .tag(request)
-           }
-           }
-           }
-           }
-           }
-           
-           default:
-           Text("Selecciona una categoría")
-           }
-           
-           } */detail: {
-               switch selection {
-               case .collections:
-                   if let request = selectedRequest {
-                       RequestView(method: request.method, endpoint: request.endpoint)
-                   } else {
-                       Text("Selecciona una request")
-                           .foregroundColor(.secondary)
-                   }
-               case .request:
-                   RequestView()
-                       .navigationTitle(selection?.title ?? "Empty")
-                       .environmentObject(storage)
-               default:
-                   Text("Selecciona algo en la lista")
-               }
-           }*/
+        @Bindable var modelData = modelData
         
-        NavigationSplitView {
-            SideBarView(selection: $selection, selectedCollectionName: $selectedCollectionName)
-                .environmentObject(storage)
-                .onChange(of: selectedCollectionName) { newCollection in
-                    // Cuando cambie la colección, selecciona el primer request para mostrar
-                    if let newCollection,
-                       let firstRequest = groupedRequests[newCollection]?.first {
-                        selectedRequest = firstRequest
-                    } else {
-                        selectedRequest = nil
+        NavigationSplitView(preferredCompactColumn: $preferredColumn) {
+            List {
+                Section {
+                    ForEach(CategoryOptions.mainPages) { page in
+                        NavigationLink(value: page) {
+                            Label(page.name, systemImage: page.iconName)
+                        }
                     }
                 }
-                .onChange(of: selection) { newSelection in
-                    // Si cambias categoría que no sea colecciones, limpia selección
-                    if newSelection != .collections {
-                        selectedCollectionName = nil
-                        selectedRequest = nil
-                    }
+            }
+            .navigationDestination(for: CategoryOptions.self) { page in
+                NavigationStack(path: $modelData.path) {
+                    page.viewForPage()
                 }
-
+                
+            }
         } detail: {
-            // Muestra detalle según selección
-            if selection == .request {
-                RequestView()
-                    .environmentObject(storage)
-            } else if selection == .collections {
-                if let request = selectedRequest {
-                    RequestView(method: request.method, endpoint: request.endpoint)
-                } else {
-                    Text("Selecciona una request")
-                        .foregroundColor(.secondary)
-                }
-            } else {
-                Text("Selecciona una categoría")
+            NavigationStack(path: $modelData.path) {
+                // Vista inicial cuando no se ha seleccionado nada aún
+                Text("Selecciona una opción del menú")
+                    .foregroundStyle(.secondary)
+                    .navigationTitle("iConnect")
+                    .navigationDestination(for: CategoryOptions.self) { page in
+                        page.viewForPage()
+                    }
             }
         }
     }
-    
 }
 
 
@@ -130,20 +53,18 @@ struct ContentView: View {
 
 
 struct CollectionsView: View {
-    @StateObject private var storage = RequestStorage()
+    @Environment(ModelData.self) var modelData
     
     var body: some View {
-        VStack {
-            List(storage.savedRequests) { request in
-                VStack(alignment: .leading) {
-                    Text(request.name)
-                        .font(.headline)
-                    Text("\(request.method) \(request.endpoint)")
-                        .font(.caption)
-                        .foregroundColor(.gray)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                ForEach(modelData.userCollections, id: \.id) { collection in
+                    CollectionListItemView(collection: collection)
+                        .padding()
+                        .cornerRadius(8)
                 }
             }
-            .navigationTitle("Collections")
+            .padding()
         }
         .toolbar {
             ToolbarItemGroup {
@@ -154,9 +75,47 @@ struct CollectionsView: View {
     
     var toolBarDeleteAll: some View {
         Button {
-            storage.deleteAllRequests()
+            // storage.deleteAllRequests()
         } label: {
             Label("Eliminar Todos", systemImage: "trash")
         }
     }
 }
+
+struct CollectionListItemView: View {
+    let collection: RequestCollection
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(collection.name)
+                .font(.title2)
+                .bold()
+            
+            if collection.description.isEmpty == false {
+                Text(collection.description)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            
+            Divider()
+            
+            if collection.request.isEmpty {
+                Text("No hay requests en esta colección")
+                    .foregroundColor(.gray)
+                    .italic()
+            } else {
+                ForEach(collection.request, id: \.id) { request in
+                    VStack(alignment: .leading) {
+                        Text(request.title)
+                            .font(.headline)
+                        Text("\(request.method) - \(request.endpoint)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+        }
+    }
+}
+
