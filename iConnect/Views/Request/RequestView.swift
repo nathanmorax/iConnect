@@ -12,7 +12,6 @@ struct RequestView: View {
     @State var showSave = false
     @State var isShowingLandmarksSelection: Bool = false
     @State private var selectedCollection: RequestCollection? = nil
-    @Environment(RequestViewModel.self) var requestViewModel
 
 
     let method: String
