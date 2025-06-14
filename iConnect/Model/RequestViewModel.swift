@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+@Observable
 class RequestViewModel: ObservableObject {
     
     @Published var responseText: String = ""
