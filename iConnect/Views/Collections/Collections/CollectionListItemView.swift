@@ -13,7 +13,7 @@ struct CollectionListItemView: View {
         
         VStack(spacing: 8) {
             
-            Image(systemName: "cube")
+            Image("icon.collection")
                 .resizable()
                 .frame(maxWidth: 32, maxHeight: 32)
                 .scaledToFill()

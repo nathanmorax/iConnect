@@ -41,10 +41,6 @@ struct CollectionDetailView: View {
 }
 
 
-
-
-
-
 #Preview {
     let modelData = ModelData()
     let previewCollection = modelData.userCollections.last!
