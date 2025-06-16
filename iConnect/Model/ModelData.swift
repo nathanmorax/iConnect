@@ -143,7 +143,6 @@ class ModelData {
 }
 
 
-
 extension RequestCollection {
     /// The app's sample collection data.
     @MainActor static let exampleData = [

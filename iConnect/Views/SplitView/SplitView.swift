@@ -32,7 +32,6 @@ struct SplitView: View {
             }
         } detail: {
             NavigationStack(path: $modelData.path) {
-                // Vista inicial cuando no se ha seleccionado nada aún
                 Text("Selecciona una opción del menú")
                     .foregroundStyle(.secondary)
                     .navigationTitle("iConnect")

@@ -15,8 +15,6 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
     
     static let mainPages: [NavigationOptions] = [.request, .collections, .favorites, .history]
 
-    
-    
     var id: String {
         switch self {
         case .request: "Requests"
