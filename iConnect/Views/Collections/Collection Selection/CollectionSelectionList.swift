@@ -34,32 +34,45 @@ struct CollectionSelectionList: View {
             }
             
             .toolbar {
-                Button {
-                    
-                    guard let collection = selectedCollection else { return }
-                    
-                    _ = modelData.createAndAddRequest(
-                        title: requestTitle,
-                        method: method,
-                        endpoint: endpoint,
-                        to: collection
-                    )
-                    
-                    dismiss()
-                    
-                } label: {
-                    Image(systemName: "checkmark")
+                ToolbarItemGroup {
+                    Button {
+                        
+                        guard let collection = selectedCollection else { return }
+                        
+                        _ = modelData.createAndAddRequest(
+                            title: requestTitle,
+                            method: method,
+                            endpoint: endpoint,
+                            to: collection
+                        )
+                        
+                        dismiss()
+                        
+                    } label: {
+                        Image(systemName: "checkmark")
+                    }
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
                 }
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
+                
             }
             .navigationTitle("Select Collection")
         }
         .padding()
     }
+}
+
+#Preview {
+    CollectionSelectionList(
+        selectedCollection: .constant(nil),
+        method: "GET",
+        endpoint: "/api/example",
+        requestTitle: "Test Request"
+    )
+    .environment(ModelData())
 }
 
 
