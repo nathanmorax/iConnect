@@ -29,3 +29,9 @@ struct CollectionSelectionLisItem: View {
     }
 }
 
+#Preview {
+    let modelData = ModelData()
+    let previewCollection = modelData.userCollections.first!
+    
+    CollectionSelectionLisItem(collection: previewCollection, isSelected: true)
+}

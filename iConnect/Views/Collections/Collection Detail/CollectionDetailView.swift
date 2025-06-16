@@ -8,22 +8,21 @@ import SwiftUI
 
 struct CollectionDetailView: View {
     let collection: RequestCollection
-    
     @State private var selection = 0
-    
+
     var body: some View {
         VStack {
             Text(collection.name)
                 .font(.title2)
                 .padding()
-            
+
             if collection.request.isEmpty {
                 Text("No hay requests en esta colección")
                     .foregroundStyle(.secondary)
             } else {
                 TabView(selection: $selection) {
                     ForEach(Array(collection.request.enumerated()), id: \.offset) { index, req in
-                        RequestView(method: req.method, endpoint: req.endpoint)
+                        RequestView(method: req.method, endpoint: req.endpoint, showsToolbar: false)
                             .tag(index)
                             .padding()
                             .tabItem {
@@ -36,9 +35,9 @@ struct CollectionDetailView: View {
             }
         }
         .padding()
-    
     }
 }
+
 
 
 #Preview {

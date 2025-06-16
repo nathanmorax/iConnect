@@ -6,20 +6,39 @@
 //
 import SwiftUI
 
+extension View {
+    @ViewBuilder
+    func `if`<Content: View>(
+        _ condition: Bool,
+        transform: (Self) -> Content
+    ) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+}
+
+
+
+
 struct RequestView: View {
     
     @StateObject private var vm: RequestViewModel
     @State var showSave = false
     @State var isShowingLandmarksSelection: Bool = false
     @State private var selectedCollection: RequestCollection? = nil
+    let showsToolbar: Bool
 
-
+    
     let method: String
     let endpoint: String
     
-    init(method: String = "GET", endpoint: String = "") {
+    init(method: String = "GET", endpoint: String = "", showsToolbar: Bool = true) {
         self.method = method
         self.endpoint = endpoint
+        self.showsToolbar = showsToolbar
         _vm = StateObject(wrappedValue: RequestViewModel(method: method, endpoint: endpoint))
     }
     
@@ -49,11 +68,15 @@ struct RequestView: View {
             Spacer()
             
         }
-        .toolbar {
-            ToolbarItemGroup {
-                toolBarSaveRequest
+        .if(showsToolbar) {
+            $0.toolbar {
+                ToolbarItemGroup {
+                    toolBarSaveRequest
+
+                }
             }
         }
+    
         .sheet(isPresented: $isShowingLandmarksSelection) {
             
             CollectionSelectionList(selectedCollection: $selectedCollection, method: vm.selectMethod.rawValue, endpoint: vm.endpoint, requestTitle: vm.responseText)
@@ -65,7 +88,7 @@ struct RequestView: View {
         .onChange(of: endpoint) {
             vm.endpoint = endpoint
         }
-
+        
     }
     
     var toolBarSaveRequest: some View {
