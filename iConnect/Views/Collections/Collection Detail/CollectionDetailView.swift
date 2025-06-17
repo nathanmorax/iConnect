@@ -34,7 +34,29 @@ struct CollectionDetailView: View {
                 .tabViewStyle(.grouped)
             }
         }
+        .toolbar {
+            ToolbarItemGroup {
+                toolBarDeleteAll
+                toolBarFavorite
+            }
+        }
         .padding()
+    }
+    
+    var toolBarDeleteAll: some View {
+        Button {
+            // storage.deleteAllRequests()
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+    
+    var toolBarFavorite: some View {
+        Button {
+            // storage.deleteAllRequests()
+        } label: {
+            Label("Favorite", systemImage: "heart")
+        }
     }
 }
 

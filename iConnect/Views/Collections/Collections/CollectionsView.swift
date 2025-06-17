@@ -13,28 +13,22 @@ struct CollectionsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                CollectionsGrid()
-                    .padding()
-                    .cornerRadius(8)
+                if modelData.userCollections.isEmpty {
+                    Text("You don’t have any saved Collections yet.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+                } else {
+                    CollectionsGrid()
+                        .padding()
+                        .cornerRadius(8)
+                }
             }
             .padding()
         }
         .navigationTitle("Collections")
-        .toolbar {
-            ToolbarItemGroup {
-                toolBarDeleteAll
-            }
-        }
         .navigationDestination(for: RequestCollection.self) { collection in
             CollectionDetailView(collection: collection)
-        }
-    }
-    
-    var toolBarDeleteAll: some View {
-        Button {
-            // storage.deleteAllRequests()
-        } label: {
-            Label("Eliminar Todos", systemImage: "trash")
         }
     }
 }
