@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-
 struct RequestView: View {
     
     @StateObject private var vm: RequestViewModel
