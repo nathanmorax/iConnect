@@ -60,18 +60,6 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
 }
 
 
-struct CollectionView: View {
-    var body: some View {
-        Text("CollectionView")
-    }
-}
-
-struct FavoritesView: View {
-    var body: some View {
-        Text("FavoritesView")
-    }
-}
-
 struct HistoryView: View {
     var body: some View {
         Text("HistoryView")

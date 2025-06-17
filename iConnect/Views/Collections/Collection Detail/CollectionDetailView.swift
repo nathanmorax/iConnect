@@ -9,6 +9,7 @@ import SwiftUI
 struct CollectionDetailView: View {
     let collection: RequestCollection
     @State private var selection = 0
+    @Environment(ModelData.self) var modelData
 
     var body: some View {
         VStack {
@@ -53,11 +54,13 @@ struct CollectionDetailView: View {
     
     var toolBarFavorite: some View {
         Button {
-            // storage.deleteAllRequests()
+            modelData.toggleFavoriteCollection(collection)
         } label: {
-            Label("Favorite", systemImage: "heart")
+            Label("Favorite", systemImage: modelData.favoritesCollection.contains(where: { $0.id == collection.id }) ? "heart.fill" : "heart")
         }
     }
+
+
 }
 
 

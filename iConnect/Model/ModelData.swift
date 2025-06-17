@@ -24,7 +24,7 @@ class ModelData {
     
     // MARK: - Collections & Requests
     var requestById: [Int: Request] = [:]
-    var favoritesCollection: RequestCollection!
+    var favoritesCollection: [RequestCollection] = []
     var userCollections: [RequestCollection] = []
     
     // MARK: - Search
@@ -68,7 +68,7 @@ class ModelData {
         guard let favorites = requestList.first(where: { $0.id == 1 }) else {
             fatalError("Favorites collection missing from example data.")
         }
-        favoritesCollection = favorites
+        favoritesCollection = [favorites]
         
         // Colecciones de usuario
         userCollections = requestList.filter { $0.id != 1 }
@@ -123,21 +123,25 @@ class ModelData {
     
     // MARK: - Favorites Management
     func isFavorite(_ request: Request) -> Bool {
-        return favoritesCollection.request.contains(request)
+        return favoritesCollection.contains { $0.request.contains(request) }
     }
-    
-    func toggleFavorite(_ request: Request) {
-        isFavorite(request) ? removeFavorite(request) : addFavorite(request)
-    }
-    
-    func addFavorite(_ request: Request) {
-        if !favoritesCollection.request.contains(request) {
-            favoritesCollection.request.append(request)
+
+    func toggleFavoriteCollection(_ collection: RequestCollection) {
+        if favoritesCollection.contains(where: { $0.id == collection.id }) {
+            removeFavoriteCollection(collection)
+        } else {
+            addFavoriteCollection(collection)
         }
     }
     
-    func removeFavorite(_ request: Request) {
-        favoritesCollection.request.removeAll { $0 == request }
+    func addFavoriteCollection(_ collection: RequestCollection) {
+        guard !favoritesCollection.contains(where: { $0.id == collection.id }) else { return }
+        favoritesCollection.append(collection)
+    }
+
+    
+    func removeFavoriteCollection(_ collection: RequestCollection) {
+        favoritesCollection.removeAll { $0.id == collection.id }
     }
     
 }
