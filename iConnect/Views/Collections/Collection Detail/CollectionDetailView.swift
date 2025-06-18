@@ -16,11 +16,8 @@ struct CollectionDetailView: View {
             VStack {
                 CollectionHeader(title: collection.name)
                 
-                RequestView()
-                    .cardStyle()
-
                 
-                //RequestsTabView(requests: collection.request, selection: $selection)
+                RequestsTabView(requests: collection.request, selection: $selection)
                 
             }
             .padding()
@@ -31,6 +28,8 @@ struct CollectionDetailView: View {
                 }
             }
         }
+        .background(Color.background)
+
     }
     
     var toolBarDeleteAll: some View {
@@ -75,24 +74,48 @@ struct CollectionHeader: View {
 struct RequestsTabView: View {
     let requests: [Request]
     @Binding var selection: Int
-    
+
     var body: some View {
-        TabView(selection: $selection) {
-            ForEach(Array(requests.enumerated()), id: \.offset) { index, req in
-                RequestView(method: req.method, endpoint: req.endpoint, showsToolbar: false)
-                    .tag(index)
-                    .padding()
-                    .background(Color.backgroundSecondary)
-                    .tabItem {
-                        Text(req.endpoint.split(separator: "/").last.map(String.init) ?? req.endpoint)
+        VStack(spacing: 16) {
+            // Selector de pestaña (puedes usar Picker, HStack, etc.)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(Array(requests.enumerated()), id: \.offset) { index, req in
+                        let label = req.endpoint.split(separator: "/").last.map(String.init) ?? req.endpoint
+
+                        Button(action: {
+                            selection = index
+                        }) {
+                            Text(label)
+                                .font(.caption)
+                                .bold()
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(selection == index ? Color.blueButton : Color.clear)
+                                .foregroundColor(selection == index ? .black : .primary)
+                                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        }
+                        .buttonStyle(.plain)
                     }
+                }
+                .padding(.horizontal)
+            }
+
+            if requests.indices.contains(selection) {
+                RequestView(
+                    method: requests[selection].method,
+                    endpoint: requests[selection].endpoint,
+                    showsToolbar: false
+                )
+            } else {
+                Text("Request no válido")
+                    .foregroundStyle(.secondary)
             }
         }
-        .frame(minWidth: 400, minHeight: 300)
-        .background(Color.backgroundSecondary)
-        .tabViewStyle(.grouped)
+        .background(Color.background)
     }
 }
+
 
 
 

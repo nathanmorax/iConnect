@@ -10,6 +10,6 @@ import SwiftUI
 extension Color {
     static let backgroundSecondary = Color("BackgroundBox")
     static let background = Color("BackgroundPrimary")
-    static let glassOverlay = Color("glassOverlay")
+    static let blueButton = Color("ButtonBlue")
 }
 
