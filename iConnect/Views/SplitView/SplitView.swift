@@ -24,6 +24,8 @@ struct SplitView: View {
                     }
                 }
             }
+            .background(Color.background)
+
             .navigationDestination(for: NavigationOptions.self) { page in
                 NavigationStack(path: $modelData.path) {
                     page.viewForPage()
@@ -40,6 +42,8 @@ struct SplitView: View {
                     }
             }
         }
+        .background(Color.background)
+        .ignoresSafeArea()
     }
 }
 

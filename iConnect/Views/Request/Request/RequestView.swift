@@ -13,7 +13,7 @@ struct RequestView: View {
     @State var isShowingLandmarksSelection: Bool = false
     @State private var selectedCollection: RequestCollection? = nil
     let showsToolbar: Bool
-
+    
     
     let method: String
     let endpoint: String
@@ -31,7 +31,6 @@ struct RequestView: View {
             Divider()
             
             HStack {
-                
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
                 
                 TextField("Endpoint", text: $vm.endpoint)
@@ -41,25 +40,28 @@ struct RequestView: View {
                 } label: {
                     Text("Send")
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(BlueButtonStyle())
+                
                 
             }
-            .padding()
+            .cardStyle()
             
             ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs)
+                .cardStyle()
             
             Spacer()
             
         }
+        .background(Color.background)
         .if(showsToolbar) {
             $0.toolbar {
                 ToolbarItemGroup {
                     toolBarSaveRequest
-
+                    
                 }
             }
         }
-    
+        
         .sheet(isPresented: $isShowingLandmarksSelection) {
             
             CollectionSelectionList(selectedCollection: $selectedCollection, method: vm.selectMethod.rawValue, endpoint: vm.endpoint, requestTitle: vm.responseText)
@@ -88,4 +90,3 @@ struct RequestView: View {
 #Preview {
     RequestView(method: "Get", endpoint: "Get")
 }
-
