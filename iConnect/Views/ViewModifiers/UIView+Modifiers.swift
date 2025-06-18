@@ -17,7 +17,7 @@ struct CardStyle: ViewModifier {
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(backgroundColor)
-                    .shadow(color: .black.opacity(0.1), radius: shadowRadius, x: 0, y: 4)
+                    .shadow(color: .black.opacity(0.4), radius: shadowRadius, x: 0, y: 4)
             )
             .padding(.horizontal, 24)
     }

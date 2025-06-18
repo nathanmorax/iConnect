@@ -24,6 +24,7 @@ struct CollectionListItemView: View {
             
         }
         .cardStyle()
+        .padding()
         
     }
 }

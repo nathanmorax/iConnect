@@ -26,10 +26,8 @@ struct RequestView: View {
     }
     
     var body: some View {
-        VStack {
-            
-            Divider()
-            
+        VStack(spacing: 8) {
+                        
             HStack {
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
                 
@@ -45,14 +43,14 @@ struct RequestView: View {
                 
             }
             .cardStyle()
-            
+
             ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs)
                 .cardStyle()
             
             Spacer()
             
         }
-        .background(Color.background)
+        .padding()
         .if(showsToolbar) {
             $0.toolbar {
                 ToolbarItemGroup {
