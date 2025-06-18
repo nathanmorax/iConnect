@@ -23,6 +23,7 @@ struct CollectionListItemView: View {
                 .foregroundStyle(.secondary)
             
         }
+        .cardStyle()
         
     }
 }

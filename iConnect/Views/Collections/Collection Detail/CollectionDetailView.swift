@@ -12,36 +12,47 @@ struct CollectionDetailView: View {
     @Environment(ModelData.self) var modelData
 
     var body: some View {
-        VStack {
-            Text(collection.name)
-                .font(.title2)
-                .padding()
+        ZStack {
+            Color.background
+            VStack {
+                Text(collection.name)
+                    .font(.title2)
+                    .padding()
 
-            if collection.request.isEmpty {
-                Text("No hay requests en esta colección")
-                    .foregroundStyle(.secondary)
-            } else {
-                TabView(selection: $selection) {
-                    ForEach(Array(collection.request.enumerated()), id: \.offset) { index, req in
-                        RequestView(method: req.method, endpoint: req.endpoint, showsToolbar: false)
-                            .tag(index)
-                            .padding()
-                            .tabItem {
-                                Text(req.endpoint.split(separator: "/").last.map(String.init) ?? req.endpoint)
-                            }
+                if collection.request.isEmpty {
+                    Text("No hay requests en esta colección")
+                        .foregroundStyle(.secondary)
+                } else {
+                    TabView(selection: $selection) {
+                        ForEach(Array(collection.request.enumerated()), id: \.offset) { index, req in
+                            RequestView(method: req.method, endpoint: req.endpoint, showsToolbar: false)
+                                .tag(index)
+                               // .padding()
+                                .background(.clear)
+                                .tabItem {
+                                    Text(req.endpoint.split(separator: "/").last.map(String.init) ?? req.endpoint)
+                                }
+                        }
                     }
+                    .frame(minWidth: 400, minHeight: 300)
+                    .background(.clear)
+                    //.tabViewStyle(.grouped)
                 }
-                .frame(minWidth: 400, minHeight: 300)
-                .tabViewStyle(.grouped)
             }
-        }
-        .toolbar {
-            ToolbarItemGroup {
-                toolBarDeleteAll
-                toolBarFavorite
+            .background(.clear)
+
+            .toolbar {
+                ToolbarItemGroup {
+                    toolBarDeleteAll
+                    toolBarFavorite
+                }
             }
+           // .padding()
+
+            
         }
-        .padding()
+
+
     }
     
     var toolBarDeleteAll: some View {
@@ -59,8 +70,6 @@ struct CollectionDetailView: View {
             Label("Favorite", systemImage: modelData.favoritesCollection.contains(where: { $0.id == collection.id }) ? "heart.fill" : "heart")
         }
     }
-
-
 }
 
 
