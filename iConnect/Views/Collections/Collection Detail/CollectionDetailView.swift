@@ -23,32 +23,20 @@ struct CollectionDetailView: View {
             .padding()
             .toolbar {
                 ToolbarItemGroup {
-                    toolBarDeleteAll
-                    toolBarFavorite
+                    ReusableToolbar(actions: [
+                        .delete { /* borrar */ },
+                        .favorite(
+                            isFavorite: modelData.favoritesCollection.contains(where: { $0.id == collection.id })
+                        ) {
+                            modelData.toggleFavoriteCollection(collection)
+                        }
+                    ])
                 }
             }
+            
         }
         .background(Color.background)
-
-    }
-    
-    var toolBarDeleteAll: some View {
-        Button {
-            // storage.deleteAllRequests()
-        } label: {
-            Label("Delete", systemImage: "trash")
-        }
-    }
-    
-    var toolBarFavorite: some View {
-        Button {
-            modelData.toggleFavoriteCollection(collection)
-        } label: {
-            Label(
-                "Favorite",
-                systemImage: modelData.favoritesCollection.contains(where: { $0.id == collection.id }) ? "heart.fill" : "heart"
-            )
-        }
+        
     }
 }
 
@@ -69,55 +57,6 @@ struct CollectionHeader: View {
             .padding()
     }
 }
-
-
-struct RequestsTabView: View {
-    let requests: [Request]
-    @Binding var selection: Int
-
-    var body: some View {
-        VStack(spacing: 16) {
-            // Selector de pestaña (puedes usar Picker, HStack, etc.)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(Array(requests.enumerated()), id: \.offset) { index, req in
-                        let label = req.endpoint.split(separator: "/").last.map(String.init) ?? req.endpoint
-
-                        Button(action: {
-                            selection = index
-                        }) {
-                            Text(label)
-                                .font(.caption)
-                                .bold()
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(selection == index ? Color.blueButton : Color.clear)
-                                .foregroundColor(selection == index ? .black : .primary)
-                                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal)
-            }
-
-            if requests.indices.contains(selection) {
-                RequestView(
-                    method: requests[selection].method,
-                    endpoint: requests[selection].endpoint,
-                    showsToolbar: false
-                )
-            } else {
-                Text("Request no válido")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .background(Color.background)
-    }
-}
-
-
-
 
 
 #Preview {

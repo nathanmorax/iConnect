@@ -54,7 +54,11 @@ struct RequestView: View {
         .if(showsToolbar) {
             $0.toolbar {
                 ToolbarItemGroup {
-                    toolBarSaveRequest
+                    ReusableToolbar(actions: [
+                        .save({
+                            isShowingLandmarksSelection.toggle()
+                        })
+                    ])
                     
                 }
             }
@@ -72,16 +76,6 @@ struct RequestView: View {
             vm.endpoint = endpoint
         }
         
-    }
-    
-    var toolBarSaveRequest: some View {
-        VStack {
-            Button {
-                isShowingLandmarksSelection.toggle()
-            } label: {
-                Label("Save Request", systemImage: "bookmark.fill")
-            }
-        }
     }
 }
 
