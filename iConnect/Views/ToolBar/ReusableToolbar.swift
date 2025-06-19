@@ -6,10 +6,38 @@
 //
 import SwiftUI
 
-enum ToolbarAction {
+enum ToolbarAction: Identifiable {
     case delete(() -> Void)
     case favorite(isFavorite: Bool, () -> Void)
     case save(() -> Void)
+
+    var id: String {
+        switch self {
+        case .delete: "delete"
+        case .favorite: "favorite"
+        case .save: "save"
+        }
+    }
+
+    var label: Label<Text, Image> {
+        switch self {
+        case .delete:
+            Label("Delete", systemImage: "trash")
+        case .favorite(let isFavorite, _):
+            Label("Favorite", systemImage: isFavorite ? "heart.fill" : "heart")
+        case .save:
+            Label("Save", systemImage: "bookmark.fill")
+        }
+    }
+
+    var action: () -> Void {
+        switch self {
+        case .delete(let action),
+             .favorite(_, let action),
+             .save(let action):
+            return action
+        }
+    }
 }
 
 struct ReusableToolbar: View {
@@ -17,19 +45,13 @@ struct ReusableToolbar: View {
 
     var body: some View {
         HStack {
-            ForEach(Array(actions.enumerated()), id: \.offset) { _, action in
-                switch action {
-                case .delete(let action):
-                    Button(action: action) { Label("Delete", systemImage: "trash") }
-                case .favorite(let isFav, let action):
-                    Button(action: action) {
-                        Label("Favorite", systemImage: isFav ? "heart.fill" : "heart")
-                    }
-                case .save(let action):
-                    Button(action: action) { Label("Save", systemImage: "bookmark.fill") }
+            ForEach(actions) { action in
+                Button(action: action.action) {
+                    action.label
                 }
             }
         }
     }
 }
+
 
