@@ -22,13 +22,7 @@ struct MethodMenuButton: View {
                     .foregroundColor(selectedMethod.color)
 
             }
-            .font(.headline)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.backgroundSecondary)
-            )
+            .buttonStyle(ButtonHTTPStyle())
         }
         .buttonStyle(.plain)
         .popover(isPresented: $showMenu, arrowEdge: .bottom) {

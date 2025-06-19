@@ -11,5 +11,7 @@ extension Color {
     static let backgroundSecondary = Color("BackgroundBox")
     static let background = Color("BackgroundPrimary")
     static let blueButton = Color("ButtonBlue")
+    static let primaryLabel = Color("LabelPrimary")
+    static let secondaryLabel = Color("LabelSecondary")
 }
 

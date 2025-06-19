@@ -33,14 +33,12 @@ struct RequestView: View {
 
 
                 TextField("Endpoint", text: $vm.endpoint)
-                    .textFieldStyle(.plain)
-                    .foregroundStyle(.white)
-                    .background(Color.backgroundSecondary)
+                    .textFieldStyle()
 
                 Button("Send") {
                     vm.sendRequest()
                 }
-                .buttonStyle(BlueButtonStyle(selectedMethod: $vm.selectMethod))
+                .buttonStyle(ButtonSendStyle(selectedMethod: $vm.selectMethod))
             }
             .cardStyle()
 

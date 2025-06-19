@@ -18,9 +18,9 @@ struct CollectionListItemView: View {
                 .frame(maxWidth: 32, maxHeight: 32)
                 .scaledToFill()
             Text(collection.name)
+                .infoTitle()
             Text("\(collection.request.count) request")
-                .font(.callout)
-                .foregroundStyle(.secondary)
+                .detailedInfoTitle()
             
         }
         .cardStyle()
