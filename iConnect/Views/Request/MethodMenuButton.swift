@@ -8,29 +8,54 @@ import SwiftUI
 
 struct MethodMenuButton: View {
     @Binding var selectedMethod: HTTPMethod
-    
-    var body: some View {
-        Menu {
-            ForEach(HTTPMethod.allCases) { method in
-                Button(action: {
-                    selectedMethod = method
-                }) {
-                    Label(method.rawValue, systemImage: selectedMethod == method ? "checkmark" : "")
-                        .tint(Color.backgroundSecondary)
+    @State private var showMenu = false
 
+    var body: some View {
+        Button(action: {
+            showMenu.toggle()
+        }) {
+            HStack {
+                Text(selectedMethod.rawValue)
+                    .foregroundStyle(selectedMethod.color)
+                Image(systemName: "chevron.down")
+                    .font(.caption)
+                    .foregroundColor(selectedMethod.color)
+
+            }
+            .font(.headline)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.backgroundSecondary)
+            )
+        }
+        .buttonStyle(.plain)
+        .popover(isPresented: $showMenu, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(HTTPMethod.allCases) { method in
+                    Button {
+                        selectedMethod = method
+                        showMenu = false
+                    } label: {
+                        HStack {
+                            Text(method.rawValue)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            if selectedMethod == method {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(selectedMethod.color)
+                            }
+                        }
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 8)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-        } label: {
-            Text(selectedMethod.rawValue)
-                .font(.headline)
-                .foregroundStyle(selectedMethod.color)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(Color.backgroundSecondary)
-                .cornerRadius(8)
+            .padding(8)
+            .frame(width: 160)
         }
-        .frame(maxWidth: 100)
-        
     }
 }
 

@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct BlueButtonStyle: ButtonStyle {
+    
+    @Binding var selectedMethod: HTTPMethod
+
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(configuration.isPressed ? Color.blue.opacity(0.7) : Color.blue)
+            .frame(maxWidth: 130)
+            //.background(configuration.isPressed ? Color.blue.opacity(0.7) : Color.blue)
+            .background(selectedMethod.color)
             .cornerRadius(8)
     }
 }

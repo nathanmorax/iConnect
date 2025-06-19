@@ -28,19 +28,19 @@ struct RequestView: View {
     var body: some View {
         VStack(spacing: 8) {
                         
-            HStack {
+            HStack(spacing: 12) {
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
-                
+
+
                 TextField("Endpoint", text: $vm.endpoint)
-                
-                Button {
+                    .textFieldStyle(.plain)
+                    .foregroundStyle(.white)
+                    .background(Color.backgroundSecondary)
+
+                Button("Send") {
                     vm.sendRequest()
-                } label: {
-                    Text("Send")
                 }
-                .buttonStyle(BlueButtonStyle())
-                
-                
+                .buttonStyle(BlueButtonStyle(selectedMethod: $vm.selectMethod))
             }
             .cardStyle()
 
