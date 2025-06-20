@@ -8,30 +8,33 @@ import SwiftUI
 
 struct CardStyle: ViewModifier {
     var cornerRadius: CGFloat = 16
-    var shadowRadius: CGFloat = 12
+    //var shadowRadius: CGFloat = 12
     var backgroundColor: Color = .backgroundSecondary
     
     func body(content: Content) -> some View {
         content
-            .padding()
+            .padding(.all, 2)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(backgroundColor)
-                    .shadow(color: .black.opacity(0.4), radius: shadowRadius, x: 0, y: 4)
+                    //.shadow(color: .black.opacity(0.4), radius: shadowRadius, x: 0, y: 4)
             )
-            .padding(.horizontal, 24)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
+            )
     }
 }
 
 extension View {
     func cardStyle(
-        cornerRadius: CGFloat = 16,
-        shadowRadius: CGFloat = 12,
+        cornerRadius: CGFloat = 8,
+        //shadowRadius: CGFloat = 12,
         backgroundColor: Color = .backgroundSecondary
     ) -> some View {
         self.modifier(CardStyle(
             cornerRadius: cornerRadius,
-            shadowRadius: shadowRadius,
+            //shadowRadius: shadowRadius,
             backgroundColor: backgroundColor
         ))
     }

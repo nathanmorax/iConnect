@@ -9,21 +9,28 @@ import SwiftUI
 struct MethodMenuButton: View {
     @Binding var selectedMethod: HTTPMethod
     @State private var showMenu = false
-
+    
     var body: some View {
         Button(action: {
             showMenu.toggle()
         }) {
-            HStack {
+            HStack(spacing: 4) {
                 Text(selectedMethod.rawValue)
                     .foregroundStyle(selectedMethod.color)
                 Image(systemName: "chevron.down")
                     .font(.caption)
-                    .foregroundColor(selectedMethod.color)
-
+                    .foregroundStyle(selectedMethod.color)
             }
-            .buttonStyle(ButtonHTTPStyle())
+            .padding(.horizontal, 4)
+            .padding(.vertical, 4)
+            .background(Color.backgroundPrimary)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+            )
+            .cornerRadius(8)
         }
+        
         .buttonStyle(.plain)
         .popover(isPresented: $showMenu, arrowEdge: .bottom) {
             VStack(alignment: .leading, spacing: 4) {
@@ -47,7 +54,6 @@ struct MethodMenuButton: View {
                     .buttonStyle(.plain)
                 }
             }
-            .padding(8)
             .frame(width: 160)
         }
     }

@@ -30,6 +30,7 @@ struct RequestView: View {
                         
             HStack(spacing: 12) {
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
+                    .padding(.leading, 8)
 
 
                 TextField("Endpoint", text: $vm.endpoint)
@@ -49,6 +50,7 @@ struct RequestView: View {
             
         }
         .padding()
+        .cornerRadius(8)
         .if(showsToolbar) {
             $0.toolbar {
                 ToolbarItemGroup {
