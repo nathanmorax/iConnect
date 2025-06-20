@@ -7,22 +7,31 @@
 
 import SwiftUI
 
+
 struct SplitView: View {
     @Environment(ModelData.self) var modelData
     @State private var preferredColumn: NavigationSplitViewColumn = .detail
-    
+
     var body: some View {
         @Bindable var modelData = modelData
-        
+
         NavigationSplitView(preferredCompactColumn: $preferredColumn) {
-            List {
-                Section {
-                    ForEach(NavigationOptions.mainPages) { page in
-                        NavigationLink(value: page) {
-                            Label(page.name, systemImage: page.iconName)
+            VStack(spacing: 0) {
+                List {
+                    Section {
+                        ForEach(NavigationOptions.mainPages) { page in
+                            NavigationLink(value: page) {
+                                Label(page.name, systemImage: page.iconName)
+                            }
                         }
                     }
                 }
+                .frame(maxHeight: .infinity)
+
+
+                UserProfile()
+                .padding(.horizontal)
+                .padding(.bottom, 12)
             }
             .background(Color.background)
 
@@ -30,7 +39,6 @@ struct SplitView: View {
                 NavigationStack(path: $modelData.path) {
                     page.viewForPage()
                 }
-                
             }
         } detail: {
             NavigationStack(path: $modelData.path) {
@@ -50,3 +58,4 @@ struct SplitView: View {
 #Preview {
     SplitView()
 }
+
