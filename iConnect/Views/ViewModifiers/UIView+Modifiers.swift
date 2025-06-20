@@ -8,7 +8,6 @@ import SwiftUI
 
 struct CardStyle: ViewModifier {
     var cornerRadius: CGFloat = 16
-    //var shadowRadius: CGFloat = 12
     var backgroundColor: Color = .backgroundSecondary
     
     func body(content: Content) -> some View {
@@ -17,7 +16,6 @@ struct CardStyle: ViewModifier {
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(backgroundColor)
-                    //.shadow(color: .black.opacity(0.4), radius: shadowRadius, x: 0, y: 4)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -29,12 +27,10 @@ struct CardStyle: ViewModifier {
 extension View {
     func cardStyle(
         cornerRadius: CGFloat = 8,
-        //shadowRadius: CGFloat = 12,
         backgroundColor: Color = .backgroundSecondary
     ) -> some View {
         self.modifier(CardStyle(
             cornerRadius: cornerRadius,
-            //shadowRadius: shadowRadius,
             backgroundColor: backgroundColor
         ))
     }
@@ -102,7 +98,7 @@ struct TextFieldStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .textFieldStyle(.plain)
-            .foregroundStyle(Color.labelPrimary)
+            .foregroundStyle(Color.white)
             .fontWeight(.semibold)
             .background(Color.backgroundSecondary)
     }

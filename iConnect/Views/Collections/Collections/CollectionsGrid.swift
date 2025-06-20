@@ -20,7 +20,6 @@ struct CollectionsGrid: View {
                 }
             }
         }
-        .padding(.all, 8)
     }
     
     private var columns: [GridItem] {

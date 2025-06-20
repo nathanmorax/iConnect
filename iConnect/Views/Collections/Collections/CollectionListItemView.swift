@@ -23,8 +23,8 @@ struct CollectionListItemView: View {
                 .detailedInfoTitle()
             
         }
+        .padding(.all)
         .cardStyle()
-        .padding()
         
     }
 }
