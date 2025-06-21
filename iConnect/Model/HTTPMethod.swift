@@ -18,11 +18,11 @@ enum HTTPMethod: String, CaseIterable, Identifiable {
     
     var color: Color {
         switch self {
-        case .get: return .green
-        case .post: return .blue
-        case .put: return .orange
-        case .delete: return .red
-        default: return .gray
+        case .get: return .greenColor
+        case .post: return .blueColor
+        case .put: return .yellowColor
+        case .delete: return .redColor
+        default: return .grayColor
         }
     }
 }
