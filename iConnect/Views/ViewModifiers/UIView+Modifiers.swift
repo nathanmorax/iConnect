@@ -12,7 +12,7 @@ struct CardStyle: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .padding(.all, 2)
+            .padding(.all, 6)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(backgroundColor)
@@ -49,19 +49,39 @@ extension View {
 
 
 // Title ViewModifier
-struct InfoTitleModifier: ViewModifier {
+
+struct InfoTitle: ViewModifier {
+    var foregroundStyle: Color = .whiteColor
+
     func body(content: Content) -> some View {
         content
-            .font(.title3)
-            .foregroundStyle(Color.secondaryLabel)
+            .font(.system(size: 16, weight: .semibold))
+            .foregroundStyle(foregroundStyle)
     }
 }
 
-struct DetailedInfoTitleModifier: ViewModifier {
+struct InfoTitle2: ViewModifier {
+    
+    var foregroundStyle: Color = .whiteColor
+
     func body(content: Content) -> some View {
         content
-            .font(.callout)
-            .foregroundStyle(.secondary)
+            .foregroundColor(foregroundStyle)
+            .font(.system(size: 13, weight: .regular))
+
+    }
+}
+
+struct InfoTitleCode: ViewModifier {
+    
+    var foregroundStyle: Color = .grayColor
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(foregroundStyle)
+            .font(.system(.body, design: .monospaced))
+            .frame(maxWidth: .infinity, alignment: .leading)
+
     }
 }
 
@@ -72,33 +92,40 @@ struct InfoTitleRequestsTabButtonStyle: ViewModifier {
         content
             .font(.caption)
             .bold()
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(isSelected ? Color.blueButton : Color.clear)
-            .foregroundColor(isSelected ? .black : .primary)
+            .foregroundColor(isSelected ? .red : .white) // <- antes del background
+            .padding(.all, 8)
+            .background(isSelected ? Color.lilacColor : Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 }
 
-extension Text {
-    func detailedInfoTitle() -> some View {
-        modifier(DetailedInfoTitleModifier())
-    }
-    func infoTitle() -> some View {
-        modifier(InfoTitleModifier())
-    }
-    
-    func infoTitleRequestsTabButtonStyle(isSelected: Bool) -> some View {
+
+extension View {
+    func infoTabButtonStyle(isSelected: Bool) -> some View {
         modifier(InfoTitleRequestsTabButtonStyle(isSelected: isSelected))
     }
+    
+    func infoTitleStyle(foregroundStyle: Color = .whiteColor) -> some View {
+        modifier(InfoTitle(foregroundStyle: foregroundStyle))
+    }
+    
+    func infoTitle2Style(foregroundStyle: Color = .whiteColor) -> some View {
+        modifier(InfoTitle2(foregroundStyle: foregroundStyle))
+    }
+    
+    func infoTitleCodeStyle(foregroundStyle: Color = .grayColor) -> some View {
+        modifier(InfoTitleCode(foregroundStyle: foregroundStyle))
+    }
+    
 }
+
 
 
 struct TextFieldStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .textFieldStyle(.plain)
-            .foregroundStyle(Color.white)
+            .foregroundStyle(Color.whiteColor)
             .fontWeight(.semibold)
             .background(Color.backgroundSecondary)
     }
