@@ -20,5 +20,6 @@ extension Color {
     static let grayColor = Color("ColorGray")
     static let lilacColor = Color("ColorLilac")
     static let whiteColor = Color("ColorWhite")
+    static let green2Color = Color("ColorGreen2")
 }
 
