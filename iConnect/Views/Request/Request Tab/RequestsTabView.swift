@@ -26,7 +26,7 @@ struct RequestsTabView: View {
                         
                     }
                 }
-                .padding(.horizontal, 38)
+                .padding(.all, 24)
             }
 
             if requests.indices.contains(selection) {
@@ -40,6 +40,5 @@ struct RequestsTabView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .background(Color.background)
     }
 }

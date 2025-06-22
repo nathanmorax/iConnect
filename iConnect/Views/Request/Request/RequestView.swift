@@ -27,6 +27,16 @@ struct RequestView: View {
     
     var body: some View {
         VStack(spacing: 8) {
+            
+            HStack{
+                Text("End Point")
+                    .font(.system(size: 16, weight: .semibold))
+                    .multilineTextAlignment(.leading)
+                Spacer()
+
+            }
+            .padding(.top, 32)
+            .padding(.bottom, 12)
                         
             HStack(spacing: 12) {
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
@@ -42,13 +52,25 @@ struct RequestView: View {
                 .buttonStyle(ButtonSendStyle(selectedMethod: $vm.selectMethod))
             }
             .cardStyle()
+            
+            HStack{
+                Text("Request body")
+                    .font(.system(size: 16, weight: .semibold))
+                    .multilineTextAlignment(.leading)
+                Spacer()
 
-            ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs)
+            }
+            .padding(.top, 32)
+            .padding(.bottom, 12)
+
+
+            ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
                 .cardStyle()
             
             Spacer()
             
         }
+        .navigationTitle("Request")
         .padding()
         .cornerRadius(8)
         .if(showsToolbar) {

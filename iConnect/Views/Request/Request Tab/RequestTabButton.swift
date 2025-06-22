@@ -14,8 +14,9 @@ struct RequestTabButton: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .infoTitleRequestsTabButtonStyle(isSelected: isSelected)
+
+                
         }
-        .buttonStyle(.plain)
+        .infoTabButtonStyle(isSelected: isSelected)
     }
 }
