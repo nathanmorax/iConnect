@@ -10,12 +10,16 @@ enum ToolbarAction: Identifiable {
     case delete(() -> Void)
     case favorite(isFavorite: Bool, () -> Void)
     case save(() -> Void)
+    case importJSON (() -> Void)
+    case exportJSON (() -> Void)
 
     var id: String {
         switch self {
         case .delete: "delete"
         case .favorite: "favorite"
         case .save: "save"
+        case .importJSON: "import"
+        case .exportJSON: "export"
         }
     }
 
@@ -27,6 +31,10 @@ enum ToolbarAction: Identifiable {
             Label("Favorite", systemImage: isFavorite ? "heart.fill" : "heart")
         case .save:
             Label("Save", systemImage: "bookmark.fill")
+        case .importJSON:
+            Label("Import JSON", systemImage: "square.and.arrow.down.fill")
+        case .exportJSON:
+            Label("Export JSON", systemImage: "square.and.arrow.up.fill")
         }
     }
 
@@ -34,7 +42,9 @@ enum ToolbarAction: Identifiable {
         switch self {
         case .delete(let action),
              .favorite(_, let action),
-             .save(let action):
+             .save(let action),
+             .importJSON(let action),
+             .exportJSON(let action):
             return action
         }
     }
