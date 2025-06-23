@@ -90,14 +90,22 @@ struct InfoTitleRequestsTabButtonStyle: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.caption)
-            .bold()
-            .foregroundColor(isSelected ? .red : .white) // <- antes del background
+            .infoTitle2Style()
+            .foregroundColor(isSelected ? .white : .grayColor)
             .padding(.all, 8)
-            .background(isSelected ? Color.lilacColor : Color.clear)
+            .background(isSelected ? Color.grayColor2 : Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .overlay(
+                Rectangle()
+                    .fill(isSelected ? Color.redColor : .clear)
+                    .frame(height: 2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4),
+                alignment: .bottom
+            )
     }
 }
+
 
 
 extension View {
