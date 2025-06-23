@@ -48,13 +48,16 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
         switch self {
         case .request:
             RequestView()
+                .navigationTitle("Request")
         case .collections:
             CollectionsView()
-
+                .navigationTitle("Collections")
         case .favorites:
             FavoritesView()
+                .navigationTitle("Favorites")
         case .history:
             HistoryView()
+                .navigationTitle("History")
         }
     }
 }

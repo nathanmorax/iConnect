@@ -29,7 +29,8 @@ struct CollectionDetailView: View {
                             isFavorite: modelData.favoritesCollection.contains(where: { $0.id == collection.id })
                         ) {
                             modelData.toggleFavoriteCollection(collection)
-                        }
+                        },
+                        .exportJSON({})
                     ])
                 }
             }

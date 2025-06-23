@@ -58,4 +58,3 @@ struct SplitView: View {
 #Preview {
     SplitView()
 }
-

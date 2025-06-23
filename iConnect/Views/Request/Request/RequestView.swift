@@ -12,6 +12,7 @@ struct RequestView: View {
     @State var showSave = false
     @State var isShowingLandmarksSelection: Bool = false
     @State private var selectedCollection: RequestCollection? = nil
+    @State private var selectedTab: ParametersRequest? = nil
     let showsToolbar: Bool
     
     
@@ -28,24 +29,16 @@ struct RequestView: View {
     var body: some View {
         VStack(spacing: 8) {
             
-            HStack{
-                Text("End Point")
-                    .font(.system(size: 16, weight: .semibold))
-                    .multilineTextAlignment(.leading)
-                Spacer()
-
-            }
-            .padding(.top, 32)
-            .padding(.bottom, 12)
-                        
+            HeaderView(title: "End Point")
+            
             HStack(spacing: 12) {
                 MethodMenuButton(selectedMethod: $vm.selectMethod)
                     .padding(.leading, 8)
-
-
+                
+                
                 TextField("Endpoint", text: $vm.endpoint)
                     .textFieldStyle()
-
+                
                 Button("Send") {
                     vm.sendRequest()
                 }
@@ -53,16 +46,10 @@ struct RequestView: View {
             }
             .cardStyle()
             
-            HStack{
-                Text("Request body")
-                    .font(.system(size: 16, weight: .semibold))
-                    .multilineTextAlignment(.leading)
-                Spacer()
-
-            }
-            .padding(.top, 32)
-            .padding(.bottom, 12)
-
+            
+            ParametersRequestView(selectedTab: $selectedTab)
+            
+            HeaderView(title: "Response")
 
             ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
                 .cardStyle()
@@ -70,7 +57,6 @@ struct RequestView: View {
             Spacer()
             
         }
-        .navigationTitle("Request")
         .padding()
         .cornerRadius(8)
         .if(showsToolbar) {
@@ -79,7 +65,8 @@ struct RequestView: View {
                     ReusableToolbar(actions: [
                         .save({
                             isShowingLandmarksSelection.toggle()
-                        })
+                        }),
+                        .importJSON { }
                     ])
                     
                 }
@@ -101,6 +88,20 @@ struct RequestView: View {
     }
 }
 
-#Preview {
-    RequestView(method: "Get", endpoint: "Get")
+
+struct HeaderView: View {
+    
+    var title: String
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 16, weight: .semibold))
+                .multilineTextAlignment(.leading)
+            Spacer()
+            
+        }
+        .padding(.top, 32)
+        .padding(.bottom, 12)
+    }
 }

@@ -17,6 +17,7 @@ struct RequestTabButton: View {
 
                 
         }
+        .buttonStyle(.borderless)
         .infoTabButtonStyle(isSelected: isSelected)
     }
 }
