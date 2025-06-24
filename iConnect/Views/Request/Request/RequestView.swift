@@ -19,12 +19,14 @@ struct RequestView: View {
     let method: String
     let endpoint: String
     
+    
     init(method: String = "GET", endpoint: String = "", showsToolbar: Bool = true) {
         self.method = method
         self.endpoint = endpoint
         self.showsToolbar = showsToolbar
         _vm = StateObject(wrappedValue: RequestViewModel(method: method, endpoint: endpoint))
     }
+    
     
     var body: some View {
         VStack(spacing: 8) {
@@ -49,10 +51,11 @@ struct RequestView: View {
             
             ParametersRequestView(selectedTab: $selectedTab)
             
-            HeaderView(title: "Response")
-
+            
             ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
-                .cardStyle()
+                .emptyState(currentResponseState != .success) {
+                    EmptyResponseView(state: currentResponseState)
+                }
             
             Spacer()
             
@@ -83,6 +86,10 @@ struct RequestView: View {
         }
         .onChange(of: endpoint) {
             vm.endpoint = endpoint
+        }
+        
+        var currentResponseState: ResponseState {
+            ResponseState(from: vm.responseText, statusCode: vm.statusCode)
         }
         
     }
