@@ -82,7 +82,7 @@ struct PathParameterRow: View {
         .foregroundColor(.white)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .overlay(Rectangle().frame(height: 1).foregroundColor(.white.opacity(0.05)), alignment: .bottom)
+        //.overlay(Rectangle().frame(height: 1).foregroundColor(.orange.opacity(0.05)), alignment: .bottom)
     }
 }
 
@@ -117,4 +117,8 @@ struct ParametersRequestView: View {
         }
         .padding(.top, 16)
     }
+}
+
+#Preview {
+    PathParametersView()
 }
