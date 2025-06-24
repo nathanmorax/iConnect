@@ -29,53 +29,55 @@ struct RequestView: View {
     
     
     var body: some View {
-        VStack(spacing: 8) {
-            
-            HeaderView(title: "End Point")
-            
-            HStack(spacing: 12) {
-                MethodMenuButton(selectedMethod: $vm.selectMethod)
-                    .padding(.leading, 8)
+        ScrollView {
+            VStack(spacing: 8) {
                 
+                HeaderView(title: "End Point")
                 
-                TextField("Endpoint", text: $vm.endpoint)
-                    .textFieldStyle()
-                
-                Button("Send") {
-                    vm.sendRequest()
-                }
-                .buttonStyle(ButtonSendStyle(selectedMethod: $vm.selectMethod))
-            }
-            .cardStyle()
-            
-            
-            ParametersRequestView(selectedTab: $selectedTab)
-            
-            
-            ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
-                .emptyState(currentResponseState != .success) {
-                    EmptyResponseView(state: currentResponseState)
-                }
-            
-            Spacer()
-            
-        }
-        .padding()
-        .cornerRadius(8)
-        .if(showsToolbar) {
-            $0.toolbar {
-                ToolbarItemGroup {
-                    ReusableToolbar(actions: [
-                        .save({
-                            isShowingLandmarksSelection.toggle()
-                        }),
-                        .importJSON { }
-                    ])
+                HStack(spacing: 12) {
+                    MethodMenuButton(selectedMethod: $vm.selectMethod)
+                        .padding(.leading, 8)
                     
+                    
+                    TextField("Endpoint", text: $vm.endpoint)
+                        .textFieldStyle()
+                    
+                    Button("Send") {
+                        vm.sendRequest()
+                    }
+                    .buttonStyle(ButtonSendStyle(selectedMethod: $vm.selectMethod))
+                }
+                .cardStyle()
+                
+                
+                ParametersRequestView(selectedTab: $selectedTab)
+                
+                
+                ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
+                    .emptyState(currentResponseState != .success) {
+                        EmptyResponseView(state: currentResponseState)
+                    }
+                
+                Spacer()
+                
+            }
+            .padding()
+            .cornerRadius(8)
+            .if(showsToolbar) {
+                $0.toolbar {
+                    ToolbarItemGroup {
+                        ReusableToolbar(actions: [
+                            .save({
+                                isShowingLandmarksSelection.toggle()
+                            }),
+                            .importJSON { }
+                        ])
+                        
+                    }
                 }
             }
         }
-        
+
         .sheet(isPresented: $isShowingLandmarksSelection) {
             
             CollectionSelectionList(selectedCollection: $selectedCollection, method: vm.selectMethod.rawValue, endpoint: vm.endpoint, requestTitle: vm.responseText)

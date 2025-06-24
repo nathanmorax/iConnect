@@ -37,6 +37,8 @@ struct PathParametersView: View {
                 
                 ForEach(parameters) { param in
                     PathParameterRow(param: param)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
                 }
             }
             .cornerRadius(8)
@@ -64,28 +66,35 @@ struct PathParameterHeaderRow: View {
 }
 
 struct PathParameterRow: View {
-    let param: PathParameter
+    @State var name: String
+    @State var type: String
+    @State var required: String
+    @State var description: String
+
+    init(param: PathParameter) {
+        _name = State(initialValue: param.name)
+        _type = State(initialValue: param.type)
+        _required = State(initialValue: param.required)
+        _description = State(initialValue: param.description)
+    }
 
     var body: some View {
         Group {
-            Text(param.name)
-                .font(.system(.body, design: .monospaced))
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(4)
-
-            Text(param.type)
-            Text(param.required)
-            Text(param.description)
+            TextField("Name", text: $name)
+            TextField("Type", text: $type)
+            TextField("Required", text: $required)
+            TextField("Description", text: $description)
         }
         .foregroundColor(.white)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        //.overlay(Rectangle().frame(height: 1).foregroundColor(.orange.opacity(0.05)), alignment: .bottom)
+        //.frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 12)
+        .textFieldStyle(.plain)
+        .foregroundStyle(Color.whiteColor)
+        .fontWeight(.semibold)
+        .background(Color.backgroundSecondary)
+        .cardStyle()
     }
 }
-
 
 
 struct ParametersRequestView: View {
