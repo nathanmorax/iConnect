@@ -24,51 +24,54 @@ class RequestViewModel: ObservableObject {
         self.endpoint = endpoint
     }
     
-    func sendRequest() {
+    @MainActor
+    func sendRequest() async {
+        // Validar URL
         guard let url = URL(string: endpoint) else {
-            DispatchQueue.main.async {
-                self.responseText = "Invalid URL"
-                self.state = .invalidURL
-            }
+            self.responseText = "Invalid URL"
+            self.statusCode = nil
+            self.responseTimeMs = nil
+            self.state = .invalidURL
             return
         }
         
+        // Configurar request
         var request = URLRequest(url: url)
         request.httpMethod = selectMethod.rawValue
         
         let startTime = Date()
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    self.responseText = "Error: \(error.localizedDescription)"
-                    self.statusCode = nil
-                    self.responseTimeMs = nil
-                    self.state = .networkError
-                    return
-                }
-                
-                if let httpResponse = response as? HTTPURLResponse {
-                    self.statusCode = httpResponse.statusCode
-                } else {
-                    self.statusCode = nil
-                }
-                
-                if let data = data, let text = String(data: data, encoding: .utf8) {
-                    self.responseText = text
-                    self.highlightedResponse = self.highlightJSONNative(text)
-                    self.state = .success
-                } else {
-                    self.responseText = "Respuesta no válida"
-                    self.highlightedResponse = AttributedString("Respuesta no válida")
-                    self.state = .invalidResponse
-                }
-
-                
-                let elapsed = Date().timeIntervalSince(startTime)
-                self.responseTimeMs = Int(elapsed * 1000)
+        do {
+            // Hacer el request con async/await
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Procesar respuesta en el main thread (ya estamos en @MainActor)
+            if let httpResponse = response as? HTTPURLResponse {
+                self.statusCode = httpResponse.statusCode
+            } else {
+                self.statusCode = nil
             }
-        }.resume()
+            
+            if let text = String(data: data, encoding: .utf8) {
+                self.responseText = text
+                self.highlightedResponse = self.highlightJSONNative(text)
+                self.state = .success
+            } else {
+                self.responseText = "Respuesta no válida"
+                self.highlightedResponse = AttributedString("Respuesta no válida")
+                self.state = .invalidResponse
+            }
+            
+            let elapsed = Date().timeIntervalSince(startTime)
+            self.responseTimeMs = Int(elapsed * 1000)
+            
+        } catch {
+            // Manejar errores
+            self.responseText = "Error: \(error.localizedDescription)"
+            self.statusCode = nil
+            self.responseTimeMs = nil
+            self.state = .networkError
+        }
     }
     
     func highlightJSONNative(_ json: String) -> AttributedString {

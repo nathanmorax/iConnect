@@ -9,7 +9,7 @@ import SwiftUI
 // Modelo
 struct PathParameter: Identifiable {
     let id = UUID()
-    let name: String
+    let batchID: String
     let type: String
     let required: String
     let description: String
@@ -17,10 +17,6 @@ struct PathParameter: Identifiable {
 
 // Vista principal
 struct PathParametersView: View {
-    
-    let parameters: [PathParameter] = [
-        PathParameter(name: "batchID", type: "string", required: "yes", description: "Unique identifier of the batch job")
-    ]
     
     let columns: [GridItem] = [
         GridItem(.flexible(minimum: 80), spacing: 1),
@@ -35,11 +31,9 @@ struct PathParametersView: View {
             LazyVGrid(columns: columns, spacing: 4) {
                 PathParameterHeaderRow()
                 
-                ForEach(parameters) { param in
-                    PathParameterRow(param: param)
+                PathParameterRow(batchID: "JJIJI", type: "", required: "", description: "")
                         .padding(.horizontal, 8)
                         .padding(.vertical, 6)
-                }
             }
             .cornerRadius(8)
             .overlay(
@@ -66,23 +60,17 @@ struct PathParameterHeaderRow: View {
 }
 
 struct PathParameterRow: View {
-    @State var name: String
+    @State var batchID: String
     @State var type: String
     @State var required: String
     @State var description: String
 
-    init(param: PathParameter) {
-        _name = State(initialValue: param.name)
-        _type = State(initialValue: param.type)
-        _required = State(initialValue: param.required)
-        _description = State(initialValue: param.description)
-    }
 
     var body: some View {
         Group {
-            TextField("Name", text: $name)
-            TextField("Type", text: $type)
-            TextField("Required", text: $required)
+            TextField("batchID", text: $batchID)
+            TextField("String", text: $type)
+            TextField("yes", text: $required)
             TextField("Description", text: $description)
         }
         .foregroundColor(.white)

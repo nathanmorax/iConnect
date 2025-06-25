@@ -43,7 +43,9 @@ struct RequestView: View {
                         .textFieldStyle()
                     
                     Button("Send") {
-                        vm.sendRequest()
+                        Task {
+                            await vm.sendRequest()
+                        }
                     }
                     .buttonStyle(ButtonSendStyle(selectedMethod: $vm.selectMethod))
                 }
