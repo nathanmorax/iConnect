@@ -39,9 +39,8 @@ struct PathParametersView: View {
                     PathParameterRow(name: param.name,
                                      path: param.path)
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
+                    .padding(.vertical, 8)
                 }
-                Spacer()
             }
             .cornerRadius(8)
             .overlay(

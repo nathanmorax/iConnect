@@ -9,6 +9,7 @@ import SwiftUI
 struct ParametersRequestView: View {
     
     @Binding var selectedTab: ParametersRequest?
+    
 
     var body: some View {
         HStack {
