@@ -31,7 +31,7 @@ enum ParametersRequest: String, CaseIterable, Hashable {
         case .params:
             PathParametersView()
         case .headers:
-            PathParametersView()
+            HeaderRequest()
         case .body:
             PathParametersView()
         }
