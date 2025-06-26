@@ -89,37 +89,3 @@ struct HeaderRequest: View {
         }
     }
 }
-
-struct HeaderRow: View {
-    var body: some View {
-        Group {
-            Text("Name")
-            Text("Value")
-            
-        }
-        .font(.subheadline.bold())
-        .foregroundColor(.white)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.all, 12)
-    }
-}
-
-struct PathHeaderRow: View {
-    @State var name: String
-    @State var value: String
-    
-    
-    var body: some View {
-        Group {
-            TextField("name", text: $name)
-            TextField("string", text: $value)
-        }
-        .foregroundColor(.white)
-        .padding(.horizontal, 12)
-        .textFieldStyle(.plain)
-        .foregroundStyle(Color.whiteColor)
-        .fontWeight(.semibold)
-        .background(Color.backgroundSecondary)
-        .cardStyle()
-    }
-}
