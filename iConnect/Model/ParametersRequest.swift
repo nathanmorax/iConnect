@@ -9,9 +9,9 @@ import SwiftUI
 enum ParametersRequest: String, CaseIterable, Hashable {
     case params
     case headers
-    case body
+    case auth
     
-    static let  allTabs: [ParametersRequest] = [.params, .headers, .body]
+    static let  allTabs: [ParametersRequest] = [.params, .headers, .auth]
     
     var name: String {
         switch self {
@@ -19,8 +19,8 @@ enum ParametersRequest: String, CaseIterable, Hashable {
             return "Params"
         case .headers:
             return "Headers"
-        case .body:
-            return "Body"
+        case .auth:
+            return "Auth"
         }
     }
     
@@ -32,8 +32,8 @@ enum ParametersRequest: String, CaseIterable, Hashable {
             PathParametersView()
         case .headers:
             HeaderRequest()
-        case .body:
-            PathParametersView()
+        case .auth:
+            AuthRequestView()
         }
     }
 }

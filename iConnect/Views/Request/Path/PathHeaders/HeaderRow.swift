@@ -7,10 +7,12 @@
 import SwiftUI
 
 struct HeaderRow: View {
+    var key: String
+    var value: String
     var body: some View {
         Group {
-            Text("Key")
-            Text("Value")
+            Text(key)
+            Text(value)
             
         }
         .font(.subheadline.bold())

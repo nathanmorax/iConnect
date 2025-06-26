@@ -33,7 +33,7 @@ struct PathParametersView: View {
         VStack(alignment: .leading, spacing: 8) {
             
             LazyVGrid(columns: columns, spacing: 4) {
-                PathParameterHeaderRow()
+                HeaderRow(key: "Name", value: "Path")
                 
                 ForEach(parameters) { param in
                     PathParameterRow(name: param.name,
