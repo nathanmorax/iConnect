@@ -1,5 +1,5 @@
 //
-//  PathHeaderRequestModel.swift
+//  HeaderRequest.swift
 //  iConnect
 //
 //  Created by Jonathan Mora on 25/06/25.
@@ -31,8 +31,8 @@ struct HeaderRequest: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             LazyVGrid(columns: columns, spacing: 4) {
-                HeaderRow()
-                
+                HeaderRow(key: "Key", value: "Value")
+
                 ForEach(headers) { header in
                     PathHeaderRow(name: header.name, value: header.value)
                         .padding(.horizontal, 8)
