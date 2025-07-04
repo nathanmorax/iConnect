@@ -11,17 +11,18 @@ struct CollectionSelectionLisItem: View {
     let isSelected: Bool
     
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "cube")
+        HStack(spacing: 16) {
+            Image(systemName: "network")
                 .resizable()
-                .frame(maxWidth: 32, maxHeight: 32)
+                .frame(maxWidth: 28, maxHeight: 28)
                 .aspectRatio(contentMode: .fill)
             
             Text(collection.name)
             Spacer()
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+            Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(isSelected ? .teal : .gray)
+                .foregroundStyle(isSelected ? Color.greenColor : Color.grayColor)
                 .font(.title)
                 .padding(.trailing, Constants.standardPadding)
         }
