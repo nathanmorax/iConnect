@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SplitView: View {
     @Environment(ModelData.self) var modelData
     @State private var preferredColumn: NavigationSplitViewColumn = .detail
@@ -28,13 +27,11 @@ struct SplitView: View {
                 }
                 .frame(maxHeight: .infinity)
 
-
                 UserProfile()
-                .padding(.horizontal)
-                .padding(.bottom, 12)
+                    .padding(.horizontal)
+                    .padding(.bottom, 12)
             }
-            .background(Color.background)
-
+            .background(.ultraThinMaterial) // ✅ Sidebar transparente
             .navigationDestination(for: NavigationOptions.self) { page in
                 NavigationStack(path: $modelData.path) {
                     page.viewForPage()
@@ -54,6 +51,7 @@ struct SplitView: View {
         .ignoresSafeArea()
     }
 }
+
 
 #Preview {
     SplitView()
