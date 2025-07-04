@@ -31,7 +31,7 @@ struct SplitView: View {
                     .padding(.horizontal)
                     .padding(.bottom, 12)
             }
-            .background(.ultraThinMaterial) // ✅ Sidebar transparente
+            .background(.ultraThinMaterial)
             .navigationDestination(for: NavigationOptions.self) { page in
                 NavigationStack(path: $modelData.path) {
                     page.viewForPage()
