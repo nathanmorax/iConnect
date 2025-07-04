@@ -8,9 +8,10 @@ import SwiftUI
 
 struct CollectionSelectionList: View {
     @Environment(ModelData.self) var modelData
-    @Binding var selectedCollection: RequestCollection?
     @Environment(\.dismiss) var dismiss
     
+    @Binding var selectedCollection: RequestCollection?
+    @Binding var collectionName: String
     
     let method: String
     let endpoint: String
@@ -33,42 +34,64 @@ struct CollectionSelectionList: View {
                 }
             }
             
-            .toolbar {
-                ToolbarItemGroup {
-                    Button {
+            TextField("New collection name", text: $collectionName)
+
+                .toolbar {
+                    ToolbarItemGroup {
+                        Button {
+                            
+                            self.saveRequestInCollection()
+                            
+                        } label: {
+                            Image(systemName: "checkmark")
+                        }
+
                         
-                        guard let collection = selectedCollection else { return }
-                        
-                        _ = modelData.createAndAddRequest(
-                            title: requestTitle,
-                            method: method,
-                            endpoint: endpoint,
-                            to: collection
-                        )
-                        
-                        dismiss()
-                        
-                    } label: {
-                        Image(systemName: "checkmark")
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
                     }
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
+                    
                 }
-                
-            }
-            .navigationTitle("Select Collection")
+                .navigationTitle("Select Collection")
         }
         .padding()
+    }
+    
+    func saveRequestInCollection() {
+        
+        let trimmedName = collectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmedName.isEmpty || selectedCollection != nil else {
+            return
+        }
+
+        let targetCollection: RequestCollection
+
+        if let selected = selectedCollection {
+            targetCollection = selected
+        } else {
+            targetCollection = modelData.addCollection(nameCollection: trimmedName)
+            selectedCollection = targetCollection
+        }
+
+        _ = modelData.createAndAddRequest(
+            title: requestTitle,
+            method: method,
+            endpoint: endpoint,
+            to: targetCollection
+        )
+        dismiss()
+
     }
 }
 
 #Preview {
     CollectionSelectionList(
         selectedCollection: .constant(nil),
-        method: "GET",
+        collectionName: .constant(""), method: "GET",
         endpoint: "/api/example",
         requestTitle: "Test Request"
     )

@@ -14,6 +14,8 @@ struct RequestView: View {
     @State private var selectedCollection: RequestCollection? = nil
     @State private var selectedTab: ParametersRequest? = nil
     let showsToolbar: Bool
+    @State private var collectionName: String = ""
+    
     
     
     let method: String
@@ -80,12 +82,18 @@ struct RequestView: View {
                 }
             }
         }
-
         .sheet(isPresented: $isShowingLandmarksSelection) {
-            
-            CollectionSelectionList(selectedCollection: $selectedCollection, method: vm.selectMethod.rawValue, endpoint: vm.endpoint, requestTitle: vm.responseText)
-                .frame(minWidth: 200.0, minHeight: 400.0)
+            CollectionSelectionList(
+                selectedCollection: $selectedCollection,
+                collectionName: $collectionName,
+                method: vm.selectMethod.rawValue,
+                endpoint: vm.endpoint,
+                requestTitle: vm.responseText
+            )
+            .frame(minWidth: 200.0, minHeight: 400.0)
         }
+
+        
         .onChange(of: method) {
             vm.selectMethod = HTTPMethod(rawValue: method) ?? .get
         }
