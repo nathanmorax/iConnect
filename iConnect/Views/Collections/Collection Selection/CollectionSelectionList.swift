@@ -35,6 +35,8 @@ struct CollectionSelectionList: View {
             }
             
             TextField("New collection name", text: $collectionName)
+                .textFieldStyle()
+                .cardStyle(cornerRadius: 8)
 
                 .toolbar {
                     ToolbarItemGroup {

@@ -12,32 +12,47 @@ enum ToolbarAction: Identifiable {
     case save(() -> Void)
     case importJSON (() -> Void)
     case exportJSON (() -> Void)
-
+    
     var id: String {
         switch self {
-        case .delete: "delete"
-        case .favorite: "favorite"
-        case .save: "save"
-        case .importJSON: "import"
-        case .exportJSON: "export"
+        case .delete: return "delete"
+        case .favorite: return "favorite"
+        case .save: return "save"
+        case .importJSON: return "import"
+        case .exportJSON: return "export"
         }
     }
-
-    var label: Label<Text, Image> {
+    
+    var title: String {
         switch self {
-        case .delete:
-            Label("Delete", systemImage: "trash")
-        case .favorite(let isFavorite, _):
-            Label("Favorite", systemImage: isFavorite ? "heart.fill" : "heart")
-        case .save:
-            Label("Save", systemImage: "bookmark.fill")
-        case .importJSON:
-            Label("Import JSON", systemImage: "square.and.arrow.down.fill")
-        case .exportJSON:
-            Label("Export JSON", systemImage: "square.and.arrow.up.fill")
+        case .delete: return "Delete"
+        case .favorite: return "Favorite"
+        case .save: return "Save"
+        case .importJSON: return "Import JSON"
+        case .exportJSON: return "Export JSON"
         }
     }
-
+    
+    var systemImageName: String {
+        switch self {
+        case .delete: return "trash"
+        case .favorite(let isFavorite, _): return isFavorite ? "heart.fill" : "heart"
+        case .save: return "bookmark.fill"
+        case .importJSON: return "square.and.arrow.down.fill"
+        case .exportJSON: return "square.and.arrow.up.fill"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .delete: return Color.redColor
+        case .favorite: return Color.greenColor
+        case .save: return Color.yellowColor
+        case .importJSON: return Color.greenColor
+        case .exportJSON: return Color.lilacColor
+        }
+    }
+    
     var action: () -> Void {
         switch self {
         case .delete(let action),
@@ -52,12 +67,15 @@ enum ToolbarAction: Identifiable {
 
 struct ReusableToolbar: View {
     let actions: [ToolbarAction]
-
+    
     var body: some View {
         HStack {
             ForEach(actions) { action in
                 Button(action: action.action) {
-                    action.label
+                    HStack {
+                        Image(systemName: action.systemImageName)
+                            .foregroundColor(action.color)
+                    }
                 }
             }
         }
@@ -65,3 +83,16 @@ struct ReusableToolbar: View {
 }
 
 
+struct ReusableToolbar_Previews: PreviewProvider {
+    static var previews: some View {
+        ReusableToolbar(actions: [
+            .delete { print("Delete tapped") },
+            .favorite(isFavorite: true) { print("Favorite tapped") },
+            .save { print("Save tapped") },
+            .importJSON { print("Import tapped") },
+            .exportJSON { print("Export tapped") }
+        ])
+        .padding()
+        .previewLayout(.sizeThatFits)
+    }
+}
