@@ -24,13 +24,15 @@ struct CollectionDetailView: View {
             .toolbar {
                 ToolbarItemGroup {
                     ReusableToolbar(actions: [
-                        .delete { /* borrar */ },
-                        .favorite(
+                        ToolbarActionModel.delete {
+                        },
+                        ToolbarActionModel.favorite(
                             isFavorite: modelData.favoritesCollection.contains(where: { $0.id == collection.id })
                         ) {
                             modelData.toggleFavoriteCollection(collection)
                         },
-                        .exportJSON({})
+                        ToolbarActionModel.exportJSON {
+                        }
                     ])
                 }
             }

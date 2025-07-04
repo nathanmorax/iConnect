@@ -72,13 +72,14 @@ struct RequestView: View {
                 $0.toolbar {
                     ToolbarItemGroup {
                         ReusableToolbar(actions: [
-                            .save({
+                            ToolbarActionModel.save {
                                 isShowingLandmarksSelection.toggle()
-                            }),
-                            .importJSON { }
+                            },
+                            ToolbarActionModel.importJSON {
+                            }
                         ])
-                        
                     }
+
                 }
             }
         }

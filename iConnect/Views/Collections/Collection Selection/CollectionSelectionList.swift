@@ -30,33 +30,30 @@ struct CollectionSelectionList: View {
                             isSelected: selectedCollection?.id == collection.id
                         )
                     }
+                    .cardStyle(cornerRadius: 8)
                     .buttonStyle(.plain)
+                    .listRowSeparator(.hidden)
                 }
             }
             
             TextField("New collection name", text: $collectionName)
                 .textFieldStyle()
                 .cardStyle(cornerRadius: 8)
+                .padding()
 
                 .toolbar {
                     ToolbarItemGroup {
-                        Button {
-                            
-                            self.saveRequestInCollection()
-                            
-                        } label: {
-                            Image(systemName: "checkmark")
-                        }
-
-                        
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
+                        ReusableToolbar(actions: [
+                            ToolbarActionModel.save {
+                                self.saveRequestInCollection()
+                            },
+                            ToolbarActionModel.cancel {
+                                dismiss()
+                            }
+                        ])
                     }
-                    
                 }
+
                 .navigationTitle("Select Collection")
         }
         .padding()
