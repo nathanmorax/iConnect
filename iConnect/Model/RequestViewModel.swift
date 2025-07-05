@@ -16,13 +16,22 @@ class RequestViewModel: ObservableObject {
     @Published var responseTimeMs: Int? = nil
     @Published var highlightedResponse: AttributedString = AttributedString("")
     @Published var state: ResponseState = .initial
-
-
+    @Published var headers: [PathHeaderRequestModel]
     
-    init(method: String = "GET", endpoint: String = "") {
+    
+    init(method: String = "GET", endpoint: String = "", savedHeaders: [PathHeaderRequestModel] = []) {
         self.selectMethod = HTTPMethod(rawValue: method) ?? .get
         self.endpoint = endpoint
+        self.headers = savedHeaders.filter {
+            !$0.name.trimmingCharacters(in: .whitespaces).isEmpty ||
+            !$0.value.trimmingCharacters(in: .whitespaces).isEmpty
+        }
+        
+        print("🔄 RequestViewModel initialized with headers:")
+        dump(self.headers)
     }
+    
+    
     
     @MainActor
     func sendRequest() async {
