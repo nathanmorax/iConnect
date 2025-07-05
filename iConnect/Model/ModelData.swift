@@ -33,7 +33,7 @@ class ModelData {
     var allCollections: [RequestCollection] {
         userCollections.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
     }
-
+    
     
     // MARK: - Init
     init() {
@@ -107,15 +107,20 @@ class ModelData {
         }
     }
     
-    func createAndAddRequest(title: String, method: String, endpoint: String, iconName: String = "folder", description: String = "", to collection: RequestCollection) -> Request {
+    func createAndAddRequest(title: String, method: String, endpoint: String, headers: [PathHeaderRequestModel], iconName: String = "folder", description: String = "", to collection: RequestCollection) -> Request {
         let newId = (requestById.keys.max() ?? 0) + 1
+        
+        let filteredHeaders = headers.filter { !$0.name.trimmingCharacters(in: .whitespaces).isEmpty }
+        let headersDict = Dictionary(uniqueKeysWithValues: filteredHeaders.map { ($0.name, $0.value) })
+        
         let newRequest = Request(
             id: newId,
             title: title,
             iconName: iconName,
             description: description,
             method: method,
-            endpoint: endpoint
+            endpoint: endpoint,
+            headers: headersDict
         )
         addRequest(newRequest, to: collection)
         return newRequest
@@ -125,7 +130,7 @@ class ModelData {
     func isFavorite(_ request: Request) -> Bool {
         return favoritesCollection.contains { $0.request.contains(request) }
     }
-
+    
     func toggleFavoriteCollection(_ collection: RequestCollection) {
         if favoritesCollection.contains(where: { $0.id == collection.id }) {
             removeFavoriteCollection(collection)
@@ -138,7 +143,7 @@ class ModelData {
         guard !favoritesCollection.contains(where: { $0.id == collection.id }) else { return }
         favoritesCollection.append(collection)
     }
-
+    
     
     func removeFavoriteCollection(_ collection: RequestCollection) {
         favoritesCollection.removeAll { $0.id == collection.id }
