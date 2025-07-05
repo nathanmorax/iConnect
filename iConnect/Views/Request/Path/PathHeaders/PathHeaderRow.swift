@@ -7,12 +7,13 @@
 import SwiftUI
 
 struct PathHeaderRow: View {
-    @State var name: String
-    @State var value: String
+    @Binding var name: String
+    @Binding var value: String
     
     
     var body: some View {
-        Group {
+        print("Rendering PathHeaderRow with name: \(name), value: \(value)")
+        return Group {
             TextField("key", text: $name)
             TextField("value", text: $value)
         }
@@ -24,4 +25,5 @@ struct PathHeaderRow: View {
         .background(Color.backgroundSecondary)
         .cardStyle()
     }
+
 }

@@ -41,7 +41,7 @@ struct AuthRequestView: View {
             LazyVGrid(columns: columns, spacing: 4) {
                 HeaderRow(key: "Key", value: "Value")
                 
-                ForEach(auth) { auth in
+                ForEach($auth) { auth in
                     PathHeaderRow(name: auth.key, value: auth.value)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 8)

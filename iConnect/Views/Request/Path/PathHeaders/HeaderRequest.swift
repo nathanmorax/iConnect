@@ -6,10 +6,16 @@
 //
 import SwiftUI
 
-struct PathHeaderRequestModel: Identifiable {
-    let id = UUID()
+struct PathHeaderRequestModel: Identifiable, Equatable, Hashable {
+    let id: UUID
     var name: String
     var value: String
+
+    init(id: UUID = UUID(), name: String = "", value: String = "") {
+        self.id = id
+        self.name = name
+        self.value = value
+    }
 }
 
 
@@ -20,10 +26,7 @@ struct HeaderRequest: View {
         GridItem(.flexible(minimum: 60), spacing: 1),
     ]
     
-    @State private var headers: [PathHeaderRequestModel] = [
-        PathHeaderRequestModel(name: "", value: "")
-    ]
-    
+    @Binding var headers: [PathHeaderRequestModel]
     
     private var canRemoveHeader: Bool {
         headers.count > 1
@@ -32,14 +35,19 @@ struct HeaderRequest: View {
         VStack(alignment: .leading, spacing: 8) {
             LazyVGrid(columns: columns, spacing: 4) {
                 HeaderRow(key: "Key", value: "Value")
-
-                ForEach(headers) { header in
-                    PathHeaderRow(name: header.name, value: header.value)
+                
+                ForEach($headers) { $header in
+                    PathHeaderRow(name: $header.name, value: $header.value)
+                    
                         .padding(.horizontal, 8)
                         .padding(.vertical, 8)
                     
+                        .onAppear {
+                            print("name: \(header.name), value: \(header.value)")
+                        }
+                    
                 }
-
+                
             }
             .cornerRadius(8)
             .overlay(
@@ -73,13 +81,16 @@ struct HeaderRequest: View {
         .frame(maxWidth: 800)
         
     }
+    
     private func addHeader() {
-        
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-            headers.append(PathHeaderRequestModel(name: "", value: ""))
+        if !headers.contains(where: { $0.name.isEmpty && $0.value.isEmpty }) {
+            withAnimation {
+                headers.append(PathHeaderRequestModel(name: "", value: ""))
+            }
         }
-        
     }
+
+
     
     private func removeHeader() {
         guard canRemoveHeader else { return }
