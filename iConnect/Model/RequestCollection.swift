@@ -42,6 +42,9 @@ struct Request: Hashable, Identifiable, Transferable {
     var description: String
     var method: String
     var endpoint: String
+    var auth: [String: String]?
+    var headers: [String: String]?
+    var parameters: [String: String]?
     
     var thumbnailImageName: String {
         return "\(id)-thumb"

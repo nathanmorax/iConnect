@@ -9,6 +9,8 @@ import SwiftUI
 struct ParametersRequestView: View {
     
     @Binding var selectedTab: ParametersRequest?
+    @Binding var headers: [PathHeaderRequestModel]
+
     
 
     var body: some View {
@@ -32,7 +34,7 @@ struct ParametersRequestView: View {
         .padding(.top, 12)
         
         VStack(alignment: .leading, spacing: 16) {
-            selectedTab?.viewForPage()
+            selectedTab?.viewForPage(headers: $headers)
         }
         .padding(.top, 16)
     }

@@ -10,7 +10,6 @@ import SwiftUI
 @main
 struct iConnectApp: App {
 
-    //@StateObject private var storage = RequestStorage()
     @State private var modelData = ModelData()
 
     

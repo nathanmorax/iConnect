@@ -16,17 +16,22 @@ struct RequestView: View {
     let showsToolbar: Bool
     @State private var collectionName: String = ""
     
-    
-    
     let method: String
     let endpoint: String
+    let savedHeaders: [PathHeaderRequestModel]
     
     
-    init(method: String = "GET", endpoint: String = "", showsToolbar: Bool = true) {
+    init(
+        method: String = "GET",
+        endpoint: String = "",
+        savedHeaders: [PathHeaderRequestModel] = [],
+        showsToolbar: Bool = true
+    ) {
         self.method = method
         self.endpoint = endpoint
         self.showsToolbar = showsToolbar
-        _vm = StateObject(wrappedValue: RequestViewModel(method: method, endpoint: endpoint))
+        self.savedHeaders = savedHeaders
+        _vm = StateObject(wrappedValue: RequestViewModel(method: method, endpoint: endpoint, savedHeaders: savedHeaders))
     }
     
     
@@ -55,7 +60,7 @@ struct RequestView: View {
                 
                 
                 
-                ParametersRequestView(selectedTab: $selectedTab)
+                ParametersRequestView(selectedTab: $selectedTab, headers: $vm.headers)
                 
                 
                 ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
@@ -79,7 +84,7 @@ struct RequestView: View {
                             }
                         ])
                     }
-
+                    
                 }
             }
         }
@@ -89,17 +94,22 @@ struct RequestView: View {
                 collectionName: $collectionName,
                 method: vm.selectMethod.rawValue,
                 endpoint: vm.endpoint,
-                requestTitle: vm.responseText
+                requestTitle: vm.responseText,
+                headers: vm.headers
             )
             .frame(minWidth: 200.0, minHeight: 400.0)
         }
-
+        
         
         .onChange(of: method) {
             vm.selectMethod = HTTPMethod(rawValue: method) ?? .get
         }
         .onChange(of: endpoint) {
             vm.endpoint = endpoint
+        }
+        
+        .onChange(of: savedHeaders) {
+            vm.headers = savedHeaders
         }
         
         var currentResponseState: ResponseState {

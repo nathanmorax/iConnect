@@ -33,8 +33,10 @@ struct RequestsTabView: View {
                 RequestView(
                     method: requests[selection].method,
                     endpoint: requests[selection].endpoint,
+                    savedHeaders: requests[selection].headers?.map { PathHeaderRequestModel(name: $0.key, value: $0.value) } ?? [],
                     showsToolbar: false
                 )
+
             } else {
                 Text("Request no válido")
                     .foregroundStyle(.secondary)

@@ -17,6 +17,7 @@ struct CollectionSelectionList: View {
     let endpoint: String
     let requestTitle: String
     
+    var headers: [PathHeaderRequestModel]
     
     var body: some View {
         VStack {
@@ -40,7 +41,7 @@ struct CollectionSelectionList: View {
                 .textFieldStyle()
                 .cardStyle(cornerRadius: 8)
                 .padding()
-
+            
                 .toolbar {
                     ToolbarItemGroup {
                         ReusableToolbar(actions: [
@@ -53,7 +54,7 @@ struct CollectionSelectionList: View {
                         ])
                     }
                 }
-
+            
                 .navigationTitle("Select Collection")
         }
         .padding()
@@ -61,42 +62,54 @@ struct CollectionSelectionList: View {
     
     func saveRequestInCollection() {
         
-        let trimmedName = collectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let filteredHeaders = headers
+            .map { PathHeaderRequestModel(name: $0.name.trimmingCharacters(in: .whitespaces),
+                                          value: $0.value.trimmingCharacters(in: .whitespaces)) }
+            .filter { !$0.name.isEmpty && !$0.value.isEmpty }
+        
+        print("Header::: ", filteredHeaders)
+        print("method::: ", method)
+        print("endpoint::: ", endpoint)
 
+        
+        let trimmedName = collectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         guard !trimmedName.isEmpty || selectedCollection != nil else {
             return
         }
-
+        
         let targetCollection: RequestCollection
-
+        
         if let selected = selectedCollection {
             targetCollection = selected
         } else {
             targetCollection = modelData.addCollection(nameCollection: trimmedName)
             selectedCollection = targetCollection
         }
-
-        _ = modelData.createAndAddRequest(
+        
+        let saveRequest = modelData.createAndAddRequest(
             title: requestTitle,
             method: method,
-            endpoint: endpoint,
+            endpoint: endpoint, headers: filteredHeaders,
             to: targetCollection
         )
+        print("📦 Request guardado:")
+        dump(saveRequest)
         dismiss()
-
+        
     }
 }
 
-#Preview {
-    CollectionSelectionList(
-        selectedCollection: .constant(nil),
-        collectionName: .constant(""), method: "GET",
-        endpoint: "/api/example",
-        requestTitle: "Test Request"
-    )
-    .environment(ModelData())
-}
-
+/*#Preview {
+ CollectionSelectionList(
+ selectedCollection: .constant(nil),
+ collectionName: .constant(""), method: "GET",
+ endpoint: "/api/example",
+ requestTitle: "Test Request", headers: [PathHeaderRequestModel(name: "", value: "")]
+ )
+ .environment(ModelData())
+ }
+ */
 
 
 
