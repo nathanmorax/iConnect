@@ -26,7 +26,6 @@ class RequestViewModel: ObservableObject {
             !$0.name.trimmingCharacters(in: .whitespaces).isEmpty ||
             !$0.value.trimmingCharacters(in: .whitespaces).isEmpty
         }
-        
         print("🔄 RequestViewModel initialized with headers:")
         dump(self.headers)
     }
@@ -35,7 +34,6 @@ class RequestViewModel: ObservableObject {
     
     @MainActor
     func sendRequest() async {
-        // Validar URL
         guard let url = URL(string: endpoint) else {
             self.responseText = "Invalid URL"
             self.statusCode = nil
@@ -44,17 +42,25 @@ class RequestViewModel: ObservableObject {
             return
         }
         
-        // Configurar request
         var request = URLRequest(url: url)
         request.httpMethod = selectMethod.rawValue
+        
+        
+        for header in headers {
+            let key = header.name.trimmingCharacters(in: .whitespaces)
+            let value = header.value.trimmingCharacters(in: .whitespaces)
+            if !key.isEmpty && !value.isEmpty {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+        print("📦 Headers enviados:")
+
         
         let startTime = Date()
         
         do {
-            // Hacer el request con async/await
             let (data, response) = try await URLSession.shared.data(for: request)
             
-            // Procesar respuesta en el main thread (ya estamos en @MainActor)
             if let httpResponse = response as? HTTPURLResponse {
                 self.statusCode = httpResponse.statusCode
             } else {
@@ -75,7 +81,6 @@ class RequestViewModel: ObservableObject {
             self.responseTimeMs = Int(elapsed * 1000)
             
         } catch {
-            // Manejar errores
             self.responseText = "Error: \(error.localizedDescription)"
             self.statusCode = nil
             self.responseTimeMs = nil

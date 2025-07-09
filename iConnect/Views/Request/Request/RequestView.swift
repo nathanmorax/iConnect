@@ -100,8 +100,7 @@ struct RequestView: View {
             .frame(minWidth: 200.0, minHeight: 400.0)
         }
         
-        
-        .onChange(of: method) {
+       .onChange(of: method) {
             vm.selectMethod = HTTPMethod(rawValue: method) ?? .get
         }
         .onChange(of: endpoint) {

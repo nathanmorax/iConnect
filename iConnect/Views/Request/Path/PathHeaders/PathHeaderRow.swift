@@ -12,7 +12,6 @@ struct PathHeaderRow: View {
     
     
     var body: some View {
-        print("Rendering PathHeaderRow with name: \(name), value: \(value)")
         return Group {
             TextField("key", text: $name)
             TextField("value", text: $value)
