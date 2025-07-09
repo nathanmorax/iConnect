@@ -42,9 +42,9 @@ struct AuthRequestView: View {
                 HeaderRow(key: "Key", value: "Value")
                 
                 ForEach($auth) { auth in
-                    PathHeaderRow(name: auth.key, value: auth.value)
+                    /*PathHeaderRow(name: auth.key, value: auth.value)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 8)*/
                     
                 }
 

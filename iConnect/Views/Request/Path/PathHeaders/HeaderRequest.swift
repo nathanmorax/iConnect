@@ -6,17 +6,25 @@
 //
 import SwiftUI
 
-struct PathHeaderRequestModel: Identifiable, Equatable, Hashable {
+class PathHeaderRequestModel: ObservableObject, Identifiable, Equatable {
     let id: UUID
-    var name: String
-    var value: String
+    @Published var name: String
+    @Published var value: String
 
     init(id: UUID = UUID(), name: String = "", value: String = "") {
         self.id = id
         self.name = name
         self.value = value
     }
+
+    static func == (lhs: PathHeaderRequestModel, rhs: PathHeaderRequestModel) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.value == rhs.value
+    }
 }
+
+
 
 
 struct HeaderRequest: View {
@@ -26,34 +34,32 @@ struct HeaderRequest: View {
         GridItem(.flexible(minimum: 60), spacing: 1),
     ]
     
-    @Binding var headers: [PathHeaderRequestModel]
+    @Binding var headers: [PathHeaderRequestModel]  // <- arreglo de headers
     
     private var canRemoveHeader: Bool {
         headers.count > 1
     }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             LazyVGrid(columns: columns, spacing: 4) {
                 HeaderRow(key: "Key", value: "Value")
                 
-                ForEach($headers) { $header in
-                    PathHeaderRow(name: $header.name, value: $header.value)
-                    
+                ForEach(headers) { header in
+                    PathHeaderRow(header: header)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 8)
-                    
                         .onAppear {
                             print("name: \(header.name), value: \(header.value)")
                         }
-                    
                 }
-                
             }
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.white.opacity(0.1), lineWidth: 1)
             )
+            
             HStack {
                 Button {
                     addHeader()
@@ -62,7 +68,6 @@ struct HeaderRequest: View {
                         .padding(8)
                 }
                 .buttonStyle(.plain)
-                
                 
                 if canRemoveHeader {
                     Button {
@@ -73,30 +78,26 @@ struct HeaderRequest: View {
                     }
                     .buttonStyle(.plain)
                 }
-                
             }
         }
         .padding()
         .frame(maxWidth: .infinity)
         .frame(maxWidth: 800)
-        
     }
     
     private func addHeader() {
         if !headers.contains(where: { $0.name.isEmpty && $0.value.isEmpty }) {
             withAnimation {
-                headers.append(PathHeaderRequestModel(name: "", value: ""))
+                headers.append(PathHeaderRequestModel())
             }
         }
     }
-
-
     
     private func removeHeader() {
         guard canRemoveHeader else { return }
-        
         withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
             headers.removeLast()
         }
     }
 }
+

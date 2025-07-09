@@ -7,14 +7,14 @@
 import SwiftUI
 
 struct PathHeaderRow: View {
-    @Binding var name: String
-    @Binding var value: String
+    @ObservedObject var header: PathHeaderRequestModel
+
     
     
     var body: some View {
         return Group {
-            TextField("key", text: $name)
-            TextField("value", text: $value)
+            TextField("key", text: $header.name)
+            TextField("value", text: $header.value)
         }
         .foregroundColor(.white)
         .padding(.horizontal, 12)

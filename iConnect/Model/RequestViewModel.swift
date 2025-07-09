@@ -17,7 +17,7 @@ class RequestViewModel: ObservableObject {
     @Published var highlightedResponse: AttributedString = AttributedString("")
     @Published var state: ResponseState = .initial
     @Published var headers: [PathHeaderRequestModel]
-    
+
     
     init(method: String = "GET", endpoint: String = "", savedHeaders: [PathHeaderRequestModel] = []) {
         self.selectMethod = HTTPMethod(rawValue: method) ?? .get
