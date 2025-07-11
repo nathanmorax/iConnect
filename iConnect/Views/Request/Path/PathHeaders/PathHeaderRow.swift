@@ -8,8 +8,6 @@ import SwiftUI
 
 struct PathHeaderRow: View {
     @ObservedObject var header: PathHeaderRequestModel
-
-    
     
     var body: some View {
         return Group {

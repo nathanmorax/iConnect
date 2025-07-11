@@ -40,6 +40,6 @@ struct ParametersRequestView: View {
     }
 }
 
-#Preview {
-    PathParametersView()
-}
+/*#Preview {
+    PathParametersView(parameters: <#Binding<[PathParameterModel]>#>)
+}*/

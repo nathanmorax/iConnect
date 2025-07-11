@@ -14,12 +14,23 @@
 //
 import SwiftUI
 
-struct AuthRequestModel: Identifiable {
-    let id = UUID()
-    var key: String
-    var value: String
-}
+class AuthRequestModel: ObservableObject, Identifiable, Equatable {
+    let id: UUID
+    @Published var name: String
+    @Published var value: String
 
+    init(id: UUID = UUID(), name: String = "", value: String = "") {
+        self.id = id
+        self.name = name
+        self.value = value
+    }
+
+    static func == (lhs: AuthRequestModel, rhs: AuthRequestModel) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.value == rhs.value
+    }
+}
 
 struct AuthRequestView: View {
     
@@ -28,9 +39,7 @@ struct AuthRequestView: View {
         GridItem(.flexible(minimum: 60), spacing: 1),
     ]
     
-    @State private var auth: [AuthRequestModel] = [
-        AuthRequestModel(key: "", value: "")
-    ]
+    @Binding private var auth: [AuthRequestModel]
     
     
     private var canRemoveHeader: Bool {
@@ -41,10 +50,10 @@ struct AuthRequestView: View {
             LazyVGrid(columns: columns, spacing: 4) {
                 HeaderRow(key: "Key", value: "Value")
                 
-                ForEach($auth) { auth in
-                    /*PathHeaderRow(name: auth.key, value: auth.value)
+                ForEach(auth) { auth in
+                    AuthRequestRow(auth: auth)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, 8)*/
+                        .padding(.vertical, 8)
                     
                 }
 
@@ -60,4 +69,23 @@ struct AuthRequestView: View {
         .frame(maxWidth: 800)
         
     }
+}
+
+struct AuthRequestRow: View {
+    @ObservedObject var auth: AuthRequestModel
+    
+    var body: some View {
+        return Group {
+            TextField("key", text: $auth.name)
+            TextField("value", text: $auth.value)
+        }
+        .foregroundColor(.white)
+        .padding(.horizontal, 12)
+        .textFieldStyle(.plain)
+        .foregroundStyle(Color.whiteColor)
+        .fontWeight(.semibold)
+        .background(Color.backgroundSecondary)
+        .cardStyle()
+    }
+
 }

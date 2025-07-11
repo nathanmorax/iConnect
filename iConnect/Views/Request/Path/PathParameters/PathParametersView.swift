@@ -6,10 +6,23 @@
 //
 import SwiftUI
 
-struct PathParameterModel: Identifiable {
-    let id = UUID()
-    var name: String
-    var path: String
+
+class PathParameterModel: ObservableObject, Identifiable, Equatable {
+    let id: UUID
+    @Published var name: String
+    @Published var value: String
+
+    init(id: UUID = UUID(), name: String = "", value: String = "") {
+        self.id = id
+        self.name = name
+        self.value = value
+    }
+
+    static func == (lhs: PathParameterModel, rhs: PathParameterModel) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.value == rhs.value
+    }
 }
 
 struct PathParametersView: View {
@@ -19,9 +32,7 @@ struct PathParametersView: View {
         GridItem(.flexible(minimum: 60), spacing: 1),
     ]
     
-    @State private var parameters: [PathParameterModel] = [
-        PathParameterModel(name: "", path: "")
-    ]
+    @Binding var parameters: [PathParameterModel]
     
     private var canRemoveParameters: Bool {
         parameters.count > 1
@@ -36,8 +47,7 @@ struct PathParametersView: View {
                 HeaderRow(key: "Name", value: "Path")
                 
                 ForEach(parameters) { param in
-                    PathParameterRow(name: param.name,
-                                     path: param.path)
+                    PathParameterRow(parameter: param)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 8)
                 }
@@ -78,7 +88,7 @@ struct PathParametersView: View {
     private func addParameter() {
         
         withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-            parameters.append(PathParameterModel(name: "", path: ""))
+            parameters.append(PathParameterModel())
         }
         
     }

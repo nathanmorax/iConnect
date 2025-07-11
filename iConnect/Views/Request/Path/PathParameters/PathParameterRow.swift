@@ -7,13 +7,14 @@
 import SwiftUI
 
 struct PathParameterRow: View {
-    @State var name: String
-    @State var path: String
+
+    @ObservedObject var parameter: PathParameterModel
+
  
     var body: some View {
         Group {
-            TextField("name", text: $name)
-            TextField("path", text: $path)
+            TextField("name", text: $parameter.name)
+            TextField("path", text: $parameter.value)
         }
         .foregroundColor(.white)
         .padding(.horizontal, 12)

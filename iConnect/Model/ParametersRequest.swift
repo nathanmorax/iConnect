@@ -27,11 +27,12 @@ enum ParametersRequest: String, CaseIterable, Hashable {
     @MainActor
     @ViewBuilder
     func viewForPage(
+        params: Binding<[PathParameterModel]>,
         headers: Binding<[PathHeaderRequestModel]>
     ) -> some View {
         switch self {
         case .params:
-            PathParametersView()
+            PathParametersView(parameters: params)
         case .headers:
             HeaderRequest(headers: headers)
         case .auth:
