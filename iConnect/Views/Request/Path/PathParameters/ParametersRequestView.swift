@@ -10,8 +10,8 @@ struct ParametersRequestView: View {
     
     @Binding var selectedTab: ParametersRequest?
     @Binding var headers: [PathHeaderRequestModel]
-
-    
+    @Binding var params: [PathParameterModel]
+    @Binding var auth: [AuthRequestModel]
 
     var body: some View {
         HStack {
@@ -34,7 +34,7 @@ struct ParametersRequestView: View {
         .padding(.top, 12)
         
         VStack(alignment: .leading, spacing: 16) {
-            selectedTab?.viewForPage(headers: $headers)
+            selectedTab?.viewForPage(params: $params, headers: $headers, auth: $auth)
         }
         .padding(.top, 16)
     }

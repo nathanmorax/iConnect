@@ -39,7 +39,7 @@ struct AuthRequestView: View {
         GridItem(.flexible(minimum: 60), spacing: 1),
     ]
     
-    @Binding private var auth: [AuthRequestModel]
+    @Binding var auth: [AuthRequestModel]
     
     
     private var canRemoveHeader: Bool {
