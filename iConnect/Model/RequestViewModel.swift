@@ -17,17 +17,22 @@ class RequestViewModel: ObservableObject {
     @Published var highlightedResponse: AttributedString = AttributedString("")
     @Published var state: ResponseState = .initial
     @Published var headers: [PathHeaderRequestModel]
+    @Published var params: [PathParameterModel]
+    @Published var auth: [AuthRequestModel]
+
 
     
-    init(method: String = "GET", endpoint: String = "", savedHeaders: [PathHeaderRequestModel] = []) {
+    init(method: String = "GET", endpoint: String = "", savedHeaders: [PathHeaderRequestModel] = [], params: [PathParameterModel]? = nil, auth: [AuthRequestModel]? = nil) {
         self.selectMethod = HTTPMethod(rawValue: method) ?? .get
         self.endpoint = endpoint
         self.headers = savedHeaders.filter {
             !$0.name.trimmingCharacters(in: .whitespaces).isEmpty ||
             !$0.value.trimmingCharacters(in: .whitespaces).isEmpty
         }
+        self.params = params ?? []
+        self.auth = auth ?? []
         print("🔄 RequestViewModel initialized with headers:")
-        dump(self.headers)
+        //dump(self.headers)
     }
     
     

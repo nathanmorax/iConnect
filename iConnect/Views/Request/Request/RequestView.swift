@@ -58,9 +58,7 @@ struct RequestView: View {
                 }
                 .cardStyle()
                 
-                
-                
-                ParametersRequestView(selectedTab: $selectedTab, headers: $vm.headers)
+                ParametersRequestView(selectedTab: $selectedTab, headers: $vm.headers, params: $vm.params, auth: $vm.auth)
                 
                 
                 ResponseViewer(response: $vm.responseText, responseStatusCode: $vm.statusCode, responseTime: $vm.responseTimeMs, highlightedResponse: $vm.highlightedResponse)
