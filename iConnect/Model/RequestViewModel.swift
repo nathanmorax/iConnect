@@ -92,7 +92,8 @@ class RequestViewModel: ObservableObject {
             self.state = .networkError
         }
     }
-    
+
+    // TODO: Handle nested JSON structures like arrays and dictionaries
     func highlightJSONNative(_ json: String) -> AttributedString {
         var result = AttributedString(json)
         
